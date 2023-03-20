@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.forsteri123.unlimitedfluidity.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "UnlimitedFluidity.refmap.json",
+  "mixins": [
+    "MixinEntityMovement",
+    "MixinSponge"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
