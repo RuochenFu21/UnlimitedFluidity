@@ -1,4 +1,4 @@
-package org.forsteri123.unlimitedfluidity.core;
+package org.forsteri.unlimitedfluidity.core;
 
 public interface Viscosity {
     /**

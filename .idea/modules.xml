@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Unlimited Fluidity.UnlimitedFluidity.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Unlimited Fluidity.UnlimitedFluidity.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/UnlimitedFluidity.main.iml" filepath="$PROJECT_DIR$/.idea/modules/UnlimitedFluidity.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/UnlimitedFluidity.test.iml" filepath="$PROJECT_DIR$/.idea/modules/UnlimitedFluidity.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/org.forsteri123.UnlimitedFluidity.main.iml" filepath="$PROJECT_DIR$/.idea/modules/org.forsteri123.UnlimitedFluidity.main.iml" />
     </modules>
   </component>
 </project>

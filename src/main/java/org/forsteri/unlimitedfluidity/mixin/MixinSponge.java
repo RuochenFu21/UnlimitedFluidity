@@ -1,7 +1,7 @@
-package org.forsteri123.unlimitedfluidity.mixin;
+package org.forsteri.unlimitedfluidity.mixin;
 
 import net.minecraft.world.level.block.SpongeBlock;
-import org.forsteri123.unlimitedfluidity.core.Unspongable;
+import org.forsteri.unlimitedfluidity.core.Unspongable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
