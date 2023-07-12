@@ -7,11 +7,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -51,7 +48,7 @@ public class DebugRegistry {
             );
 
     public static RegistryObject<LiquidBlock> DEBUG_FLUID_BLOCK = DebugRegistry.BLOCKS.register("debug_fluid_block",
-            () -> new LiquidBlock(() -> DebugRegistry.DEBUG_FLUID.get(), BlockBehaviour.Properties.of(Material.WATER)
+            () -> new GasBlock(() -> DebugRegistry.DEBUG_FLUID.get(), BlockBehaviour.Properties.of(Material.WATER)
                     .noCollission().strength(100f).noDrops()));
 
     public static RegistryObject<Item> DEBUG_FLUID_BUCKET = DebugRegistry.ITEMS.register("debug_fluid_bucket",

@@ -12,18 +12,28 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
+import org.forsteri.unlimitedfluidity.util.Fragments;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Arrays;
 
 @ParametersAreNonnullByDefault
 public abstract class FlowingGas extends ForgeFlowingFluid {
-    public static final int MAX_AMOUNT = 2520;
+    public static final int MAX_AMOUNT = 81;
     public static final IntegerProperty DENSITY = IntegerProperty.create("density", 1, MAX_AMOUNT);
 
     protected FlowingGas(ForgeFlowingFluid.Properties properties) {
         super(properties);
+        if (this.isSource(this.defaultFluidState())) {
+            this.registerDefaultState(this.getStateDefinition().any()
+                    .setValue(DENSITY, MAX_AMOUNT)
+            );
+        } else {
+            this.registerDefaultState(this.getStateDefinition().any()
+                    .setValue(DENSITY, MAX_AMOUNT - 1)
+                    .setValue(LEVEL, 7)
+            );
+        }
     }
 
     @Override
@@ -48,7 +58,7 @@ public abstract class FlowingGas extends ForgeFlowingFluid {
                 }
                 pLevel.setBlock(pPos, Blocks.AIR.defaultBlockState(), 3);
             } else {
-                if (!isSource(pState)) return;
+//                if (!isSource(pState)) return;
 
                 boolean[][] blockedMatrix = new boolean[3][3];
 
@@ -72,7 +82,7 @@ public abstract class FlowingGas extends ForgeFlowingFluid {
                     }
                 }
 
-                int openSpaceCount = 3 * 3 - Arrays.deepToString(blockedMatrix).replaceAll("[^t]", "").length();
+                int openSpaceCount = Fragments.countHierarchically(blockedMatrix, (Object object) -> object instanceof Boolean && !(boolean) object);
 
                 if (openSpaceCount == 0) return;
 
@@ -90,35 +100,37 @@ public abstract class FlowingGas extends ForgeFlowingFluid {
         }
     }
 
-//    @Override
-//    protected BlockState createLegacyBlock(FluidState state)
-//    {
-//        if (super.createLegacyBlock(state).getBlock() instanceof AirBlock) return super.createLegacyBlock(state);
-//
-//        return super.createLegacyBlock(state).setValue(DENSITY, state.getValue(DENSITY));
-//    }
+    @Override
+    protected BlockState createLegacyBlock(FluidState state)
+    {
+        if (super.createLegacyBlock(state).getBlock() instanceof AirBlock) return super.createLegacyBlock(state);
+
+        return super.createLegacyBlock(state).setValue(DENSITY, state.getValue(DENSITY));
+    }
 
     protected boolean canSpreadTo(LevelAccessor pLevel, BlockPos pPos){
         return (pLevel.getBlockState(pPos).is(Blocks.AIR)) || (pLevel.getBlockState(pPos).getMaterial().isReplaceable());
+    }
+
+    protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
+        super.createFluidStateDefinition(builder);
+        if (!this.isSource(this.defaultFluidState()))
+            builder.add(LEVEL);
+        builder.add(DENSITY);
     }
 
     public @NotNull FluidState getFlowing(int p_75954_, boolean p_75955_) {
         return this.getFlowing().defaultFluidState().setValue(DENSITY, p_75954_).setValue(FALLING, p_75955_);
     }
 
+    @Override
+    public int getAmount(FluidState pState) {
+        return pState.getValue(DENSITY);
+    }
+
     public static class Flowing extends FlowingGas {
         public Flowing(Properties properties) {
             super(properties);
-            registerDefaultState(getStateDefinition().any().setValue(DENSITY, MAX_AMOUNT - 1));
-        }
-
-        protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
-            super.createFluidStateDefinition(builder);
-            builder.add(DENSITY);
-        }
-
-        public int getAmount(FluidState state) {
-            return state.getValue(DENSITY);
         }
 
         public boolean isSource(FluidState state) {
@@ -129,17 +141,6 @@ public abstract class FlowingGas extends ForgeFlowingFluid {
     public static class Source extends FlowingGas {
         public Source(Properties properties) {
             super(properties);
-            registerDefaultState(getStateDefinition().any().setValue(DENSITY, MAX_AMOUNT));
-        }
-
-        protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
-            super.createFluidStateDefinition(builder);
-            builder.add(DENSITY);
-        }
-
-        @Override
-        public int getAmount(FluidState p_164509_) {
-            return MAX_AMOUNT;
         }
 
         @Override
