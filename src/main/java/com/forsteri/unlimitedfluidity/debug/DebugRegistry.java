@@ -1,5 +1,8 @@
-package org.forsteri.unlimitedfluidity.debug;
+package com.forsteri.unlimitedfluidity.debug;
 
+import com.forsteri.unlimitedfluidity.UnlimitedFluidity;
+import com.forsteri.unlimitedfluidity.core.flowingGas.FlowingGas;
+import com.forsteri.unlimitedfluidity.core.flowingGas.GasBlock;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -16,9 +19,6 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.forsteri.unlimitedfluidity.UnlimitedFluidity;
-import org.forsteri.unlimitedfluidity.core.flowingGas.FlowingGas;
-import org.forsteri.unlimitedfluidity.core.flowingGas.GasBlock;
 
 public class DebugRegistry {
     public static final DeferredRegister<Fluid> FLUIDS =

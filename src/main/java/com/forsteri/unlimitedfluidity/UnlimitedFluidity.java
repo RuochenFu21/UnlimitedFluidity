@@ -1,11 +1,13 @@
-package org.forsteri.unlimitedfluidity;
+package com.forsteri.unlimitedfluidity;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.forsteri.unlimitedfluidity.core.ModParticles;
-import org.forsteri.unlimitedfluidity.debug.DebugRegistry;
+import com.forsteri.unlimitedfluidity.core.ModParticles;
+import com.forsteri.unlimitedfluidity.debug.DebugRegistry;
 
 @Mod(UnlimitedFluidity.MOD_ID)
 public class UnlimitedFluidity {
@@ -18,5 +20,10 @@ public class UnlimitedFluidity {
         DebugRegistry.register(eventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent
+    public void registerCommands(RegisterCommandsEvent event) {
+        System.out.println("Registering commands");
     }
 }

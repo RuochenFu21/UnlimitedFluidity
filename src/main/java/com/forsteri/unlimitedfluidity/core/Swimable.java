@@ -1,4 +1,4 @@
-package org.forsteri.unlimitedfluidity.core;
+package com.forsteri.unlimitedfluidity.core;
 
 
 /**

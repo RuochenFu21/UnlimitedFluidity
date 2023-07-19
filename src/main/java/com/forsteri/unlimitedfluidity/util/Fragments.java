@@ -1,4 +1,4 @@
-package org.forsteri.unlimitedfluidity.util;
+package com.forsteri.unlimitedfluidity.util;
 
 import org.jetbrains.annotations.NotNull;
 

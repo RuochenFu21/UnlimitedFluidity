@@ -11,11 +11,12 @@ buildscript {
 
 plugins {
     id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'idea'
 }
 
 apply plugin: 'org.spongepowered.mixin'
 
-group = 'org.forsteri'
+group = 'com.forsteri.unlimitedfluidity'
 version = '1.1'
 
 java {
@@ -134,13 +135,6 @@ mixin {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
 }
 
 dependencies {
@@ -162,6 +156,9 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    minecraftLibrary 'org.apfloat:apfloat:1.11.0'
+    minecraftLibrary 'org.jgrapht:jgrapht:1.5.2'
+    minecraftLibrary 'org.jgrapht:jgrapht-core:1.5.2'
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

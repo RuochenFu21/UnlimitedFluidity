@@ -1,5 +1,6 @@
-package org.forsteri.unlimitedfluidity.mixin;
+package com.forsteri.unlimitedfluidity.mixin;
 
+import com.forsteri.unlimitedfluidity.core.Viscosity;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Nameable;
@@ -8,8 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityAccess;
 import net.minecraft.world.phys.Vec3;
-import org.forsteri.unlimitedfluidity.core.Swimable;
-import org.forsteri.unlimitedfluidity.core.Viscosity;
+import com.forsteri.unlimitedfluidity.core.Swimable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

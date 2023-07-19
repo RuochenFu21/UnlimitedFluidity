@@ -1,4 +1,4 @@
-package org.forsteri.unlimitedfluidity.core.flowingGas;
+package com.forsteri.unlimitedfluidity.core.flowingGas;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;

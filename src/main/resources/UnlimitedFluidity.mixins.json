@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "org.forsteri.unlimitedfluidity.mixin",
+  "package": "com.forsteri.unlimitedfluidity.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "UnlimitedFluidity.refmap.json",
   "mixins": [
