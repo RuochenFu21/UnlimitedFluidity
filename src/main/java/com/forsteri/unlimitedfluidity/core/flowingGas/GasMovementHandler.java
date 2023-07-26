@@ -6,20 +6,24 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultUndirectedGraph;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GasMovementHandler {
     public static final Map<Pair<LevelAccessor, FlowingGas>, GasMovementHandler> handlers = new HashMap<>();
 
     private final LevelAccessor level;
+    public static final int DEFAULT_VERTEX_WEIGHT = 128;
+
     private final FlowingGas source;
 
-    public final Graph<BlockPos, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+    public final Graph<Weighted<BlockPos>, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
 
     public GasMovementHandler(LevelAccessor level, FlowingGas source) {
         this.level = level;
@@ -32,7 +36,14 @@ public class GasMovementHandler {
 
     protected List<GasMovement> operations = new ArrayList<>();
 
-    public void tick() {
+    protected long lastTick = 0;
+
+    public void tick(long tick) {
+        if (tick >= lastTick) {
+            lastTick = tick;
+//            graph
+        }
+
         while (!operations.isEmpty()) {
             GasMovement movement = operations.get(0);
             operations.remove(0);
