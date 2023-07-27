@@ -18,13 +18,12 @@ public class Weighted<T> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Weighted<?> weighted = (Weighted<?>) o;
-        return weight == weighted.weight && Objects.equals(value, weighted.value);
+        if (!(o instanceof Weighted<?> weighted)) return false;
+        return Objects.equals(getValue(), weighted.getValue());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value, weight);
+        return Objects.hash(getValue());
     }
 }

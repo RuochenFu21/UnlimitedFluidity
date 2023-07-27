@@ -16,6 +16,7 @@ import com.forsteri.unlimitedfluidity.util.Fragments;
 import org.jetbrains.annotations.NotNull;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.BFSShortestPath;
+import org.jgrapht.graph.AbstractBaseGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.traverse.BreadthFirstIterator;
 
@@ -62,6 +63,8 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
 
     @Override
     public void tick(Level pLevel, BlockPos pPos, FluidState pState) {
+        if (pLevel.isClientSide) return;
+
         this.spread(pLevel, pPos, pState);
     }
 
@@ -79,47 +82,69 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
 
     @Override
     protected void spread(LevelAccessor pLevel, BlockPos pPos, FluidState pState) {
-        if (pState.isEmpty())  return;
+        if (pState.isEmpty()) return;
 
         if (canSpreadTo(pLevel, pState, pPos.above()))
             spreadVertically(pLevel, pPos, pState);
         else if (spreadHorizontally(pLevel, pPos, pState, true))
             spreadHorizontally(pLevel, pPos, pState, false);
-        else findAndMoveUp(pLevel, pPos);
+        else findAndMoveUp(pLevel, pPos, pState);
 
         movementHandler(pLevel).tick(pLevel.getLevelData().getDayTime());
     }
 
-    protected void findAndMoveUp(LevelAccessor pLevel, BlockPos pPos) {
-        if (!movementHandler(pLevel).graph.containsVertex(new Weighted<>(pPos, GasMovementHandler.DEFAULT_VERTEX_WEIGHT))) return;
+    protected void findAndMoveUp(LevelAccessor pLevel, BlockPos pPos, FluidState pState) {
+        Weighted<BlockPos> start = new Weighted<>(pPos, GasMovementHandler.DEFAULT_VERTEX_WEIGHT);
 
-        Iterator<Weighted<BlockPos>> startIterator = new BreadthFirstIterator<>(movementHandler(pLevel).graph);
-        Weighted<BlockPos> start = null;
-        while (startIterator.hasNext()) {
-            start = startIterator.next();
-            if (start.getValue() == pPos) break;
-        }
+        if (!(movementHandler(pLevel).graph.clone() instanceof AbstractBaseGraph<?, ?> copied))
+            return;
 
-        if (start == null) return;
+        @SuppressWarnings("unchecked")
+        AbstractBaseGraph<Weighted<BlockPos>, DefaultEdge> graph = (AbstractBaseGraph<Weighted<BlockPos>, DefaultEdge>) copied;
 
-        Iterator<Weighted<BlockPos>> iterator = new BreadthFirstIterator<>(movementHandler(pLevel).graph, start);
+        boolean hasDestination = false;
         Weighted<BlockPos> destination = null;
-        while (iterator.hasNext()) {
-            destination = iterator.next();
-            if (destination.getValue().getY() == pPos.getY() + 1) break;
+
+        GraphProcessing: while (!graph.vertexSet().isEmpty()) {
+            if (!graph.containsVertex(start)) return;
+
+            Iterator<Weighted<BlockPos>> iterator = new BreadthFirstIterator<>(graph, start);
+            while (iterator.hasNext()) {
+                destination = iterator.next();
+                if (destination.getValue().getY() < pPos.getY()) {
+                    graph.removeVertex(destination);
+                    continue GraphProcessing;
+                }
+
+                if (destination.getValue().getY() == pPos.getY() + 1) {
+                    hasDestination = true;
+                    break GraphProcessing;
+                }
+
+                int density = movementHandler(pLevel).getDensity(destination.getValue()) + pState.getValue(DENSITY);
+                if (
+                        density > MAX_AMOUNT
+                ) {
+                    graph.removeVertex(destination);
+                    continue GraphProcessing;
+                }
+            }
+
+            break;
         }
 
-        if (destination == null) return;
+        if (!hasDestination) return;
 
-        BFSShortestPath<Weighted<BlockPos>, DefaultEdge> pathFinder = new BFSShortestPath<>(movementHandler(pLevel).graph);
+        BFSShortestPath<Weighted<BlockPos>, DefaultEdge> pathFinder = new BFSShortestPath<>(graph);
 
         GraphPath<Weighted<BlockPos>, DefaultEdge> path = pathFinder.getPath(start, destination);
 
         if (path.getVertexList().size() <= 1) return;
 
-        System.out.println(path.getVertexList().get(1).getValue().subtract(pPos));
+        BlockPos gasDelta = path.getVertexList().get(1).getValue().subtract(pPos);
 
-//        movementHandler(pLevel).graph
+        movementHandler(pLevel).move(pPos, pState.getValue(DENSITY), Direction.getNearest(gasDelta.getX(), gasDelta.getY(), gasDelta.getZ()));
+
     }
 
     protected void spreadVertically(LevelAccessor pLevel, BlockPos pPos, FluidState pState) {
@@ -183,9 +208,33 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
             }
         }
 
-        if (simulate) return true;
+        boolean executed;
 
+        do {
+            executed = false;
+            for (int i = -1; i < 2; i++) {
+                for (int j = -1; j < 2; j++) {
+                    if (i == 0 && j == 0) continue;
+                    if (!blockedMatrix[i + 1][j + 1]) {
+                        BlockPos newPos = pPos.offset(i, 0, j);
+                        if (totalDensity / openSpaceCount == movementHandler(pLevel).getDensity(newPos)) {
+                            if (totalDensity / openSpaceCount == 0) return false;
+
+                            blockedMatrix[i + 1][j + 1] = true;
+                            totalDensity -= movementHandler(pLevel).getDensity(newPos);
+                            openSpaceCount--;
+                            executed = true;
+                        }
+                    }
+                }
+            }
+        } while (executed);
+
+        if (openSpaceCount <= 0) throw new IllegalStateException("debug: openSpaceCount <= 0");
+        if (openSpaceCount == 1) return false;
         if (totalDensity / openSpaceCount == 0) return false;
+
+        if (simulate) return true;
 
         movementHandler(pLevel).increase(pPos, totalDensity / openSpaceCount + totalDensity % openSpaceCount - getAmount(pState));
 

@@ -6,7 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jgrapht.Graph;
+import org.jgrapht.graph.AbstractBaseGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultUndirectedGraph;
 
@@ -20,10 +20,9 @@ public class GasMovementHandler {
 
     private final LevelAccessor level;
     public static final int DEFAULT_VERTEX_WEIGHT = 128;
-
     private final FlowingGas source;
 
-    public final Graph<Weighted<BlockPos>, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+    public final AbstractBaseGraph<Weighted<BlockPos>, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
 
     public GasMovementHandler(LevelAccessor level, FlowingGas source) {
         this.level = level;
@@ -45,27 +44,29 @@ public class GasMovementHandler {
         }
 
         while (!operations.isEmpty()) {
-            GasMovement movement = operations.get(0);
+            GasMovement operation = operations.get(0);
             operations.remove(0);
 
-            if (movement.operations.stream().anyMatch(operation ->
-                    getDensity(operation.getFirst()) == -1 ||
-                    getDensity(operation.getFirst()) + operation.getSecond() < 0
-            )) continue;
+            if (operation.movements.stream().anyMatch(movement ->
+                    getDensity(movement.getFirst()) == -1 ||
+                    getDensity(movement.getFirst()) + movement.getSecond() > FlowingGas.MAX_AMOUNT ||
+                    getDensity(movement.getFirst()) + movement.getSecond() < 0
+            )) {
+                continue;
+            }
 
-            for (Pair<BlockPos, Integer> operation : movement.operations) {
-                BlockPos pos = operation.getFirst();
-                int resultDensity = getDensity(pos) + operation.getSecond();
+            for (Pair<BlockPos, Integer> movement : operation.movements) {
+                BlockPos pos = movement.getFirst();
+                int resultDensity = getDensity(pos) + movement.getSecond();
 
                 if (pos.getY() < level.getMinBuildHeight() || pos.getY() > level.getMaxBuildHeight()) continue;
 
-                if (resultDensity == 0) {
+                if (resultDensity == 0)
                     level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-                } else if (resultDensity == FlowingGas.MAX_AMOUNT) {
+                else if (resultDensity == FlowingGas.MAX_AMOUNT)
                     level.setBlock(pos, source.getSource().defaultFluidState().createLegacyBlock(), 11);
-                } else {
+                else
                     level.setBlock(pos, source.getFlowing(resultDensity, false).createLegacyBlock(), 11);
-                }
             }
         }
     }
@@ -93,7 +94,7 @@ public class GasMovementHandler {
     }
 
     private static class GasMovement {
-        protected ArrayList<Pair<BlockPos, Integer>> operations = new ArrayList<>();
+        protected ArrayList<Pair<BlockPos, Integer>> movements = new ArrayList<>();
 
         public static GasMovement create() {
             return new GasMovement();
@@ -102,12 +103,12 @@ public class GasMovementHandler {
         public GasMovement() {}
 
         public GasMovement increase(BlockPos pos, int density) {
-            operations.add(new Pair<>(pos, density));
+            movements.add(new Pair<>(pos, density));
             return this;
         }
 
         public GasMovement decrease(BlockPos pos, int density) {
-            operations.add(new Pair<>(pos, -density));
+            movements.add(new Pair<>(pos, -density));
             return this;
         }
     }

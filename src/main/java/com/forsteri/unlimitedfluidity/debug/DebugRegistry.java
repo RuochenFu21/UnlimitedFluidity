@@ -43,7 +43,7 @@ public class DebugRegistry {
             () -> DEBUG_FLUID_FLOWING.get(),
             FluidAttributes.builder(WATER_STILL_RL, WATER_FLOWING_RL)
                     .density(15).luminosity(2).viscosity(5).overlay(WATER_OVERLAY_RL)
-                    .color(0xbffcba03)).slopeFindDistance(0).levelDecreasePerBlock(0)
+                    .color(0xbffcba03)).slopeFindDistance(0).levelDecreasePerBlock(0).tickRate(1)
             .block(() -> DebugRegistry.DEBUG_FLUID_BLOCK.get()).bucket(() -> DebugRegistry.DEBUG_FLUID_BUCKET.get()
             );
 
