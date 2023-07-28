@@ -1,5 +1,6 @@
 package com.forsteri.unlimitedfluidity.core.flowingGas;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -21,15 +22,18 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.traverse.BreadthFirstIterator;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Iterator;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @ParametersAreNonnullByDefault
 public abstract class FlowingGas extends ForgeFlowingFluid implements Spongability {
     public boolean spongable(){
         return true;
     }
-    public static final int MAX_AMOUNT = 128;
-    public static final IntegerProperty DENSITY = IntegerProperty.create("density", 1, MAX_AMOUNT);
+    public static final int MAX_DENSITY = 128;
+    public static final IntegerProperty DENSITY = IntegerProperty.create("density", 1, MAX_DENSITY);
+    public static final Map<LevelAccessor, Map<BlockPos, Direction>> gasMovementMap = new HashMap<>();
 
     @Override
     public FlowingGas getSource() {
@@ -51,11 +55,11 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
         super(properties);
         if (this.isSource(this.defaultFluidState())) {
             this.registerDefaultState(this.getStateDefinition().any()
-                    .setValue(DENSITY, MAX_AMOUNT)
+                    .setValue(DENSITY, MAX_DENSITY)
             );
         } else {
             this.registerDefaultState(this.getStateDefinition().any()
-                    .setValue(DENSITY, MAX_AMOUNT - 1)
+                    .setValue(DENSITY, MAX_DENSITY - 1)
                     .setValue(LEVEL, 7)
             );
         }
@@ -76,91 +80,163 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
 
     }
 
-    public GasMovementHandler movementHandler(LevelAccessor level) {
+    public GasMovementHandler getMovementHandler(LevelAccessor level) {
         return GasMovementHandler.getOrCreate(level, this);
+    }
+
+    public AbstractBaseGraph<BlockPos, DefaultEdge> getGraph(LevelAccessor level) {
+        return getMovementHandler(level).graph;
     }
 
     @Override
     protected void spread(LevelAccessor pLevel, BlockPos pPos, FluidState pState) {
         if (pState.isEmpty()) return;
 
-        if (canSpreadTo(pLevel, pState, pPos.above()))
-            spreadVertically(pLevel, pPos, pState);
+        if (spreadVertically(pLevel, pPos, pState, true))
+            spreadVertically(pLevel, pPos, pState, false);
+        else if (moveInPath(pLevel, pPos, pState, true))
+            moveInPath(pLevel, pPos, pState, false);
         else if (spreadHorizontally(pLevel, pPos, pState, true))
             spreadHorizontally(pLevel, pPos, pState, false);
-        else findAndMoveUp(pLevel, pPos, pState);
+        else findAndMoveUp(pLevel, pPos, pState, false);
 
-        movementHandler(pLevel).tick(pLevel.getLevelData().getDayTime());
+        getMovementHandler(pLevel).tick(pLevel.getLevelData().getDayTime());
     }
 
-    protected void findAndMoveUp(LevelAccessor pLevel, BlockPos pPos, FluidState pState) {
-        Weighted<BlockPos> start = new Weighted<>(pPos, GasMovementHandler.DEFAULT_VERTEX_WEIGHT);
+    protected static Map<BlockPos, Direction> getGasMap(LevelAccessor level) {
+        return gasMovementMap.computeIfAbsent(level, k -> new HashMap<>());
+    }
 
-        if (!(movementHandler(pLevel).graph.clone() instanceof AbstractBaseGraph<?, ?> copied))
-            return;
+    @SuppressWarnings("ConstantValue")
+    protected boolean moveInPath(LevelAccessor pLevel, BlockPos pPos, FluidState pState, boolean simulated) {
+        Direction direction = getGasMap(pLevel).get(pPos);
+        if (direction == null) return false;
+
+        int density = getMovementHandler(pLevel).getDensity(pPos.relative(direction));
+
+        boolean invalid = false;
+        boolean currentOnly = false;
+        boolean fixableWithFindingAgain = false;
+
+        invalid |= density == MAX_DENSITY;
+        invalid |= looped(pLevel, pPos.relative(direction));
+        invalid |= density == -1;
+        invalid |= !getGasMap(pLevel).containsKey(pPos.relative(direction)) && direction != Direction.UP;
+
+        currentOnly |= density == MAX_DENSITY;
+        fixableWithFindingAgain |= looped(pLevel, pPos);
+
+        if (invalid) {
+            getGasMap(pLevel).remove(pPos);
+            if (!currentOnly)
+                getGraph(pLevel).removeEdge(pPos, pPos.relative(direction));
+            if (fixableWithFindingAgain && findAndMoveUp(pLevel, pPos, pState, true) && !simulated)
+                findAndMoveUp(pLevel, pPos, pState, false);
+
+            return false;
+        }
+
+        if (!simulated)
+            getMovementHandler(pLevel).move(pPos, pState.getValue(DENSITY), direction);
+
+        return true;
+    }
+
+    private static final List<BlockPos> loopCheck = new ArrayList<>();
+    protected static boolean looped(LevelAccessor pLevel, BlockPos pPos) {
+        Direction gasMovement = getGasMap(pLevel).get(pPos);
+        if (loopCheck.contains(pPos) || gasMovement == null || gasMovement == Direction.UP) {
+            boolean contains = loopCheck.contains(pPos);
+            loopCheck.clear();
+            return contains;
+        }
+        loopCheck.add(pPos);
+        return looped(pLevel, pPos.relative(gasMovement));
+    }
+
+    protected boolean findAndMoveUp(LevelAccessor pLevel, BlockPos pPos, FluidState pState, boolean simulated) {
+        if (!(getGraph(pLevel).clone() instanceof AbstractBaseGraph<?, ?> copied))
+            throw new IllegalStateException("Graph is not a AbstractBaseGraph!");
 
         @SuppressWarnings("unchecked")
-        AbstractBaseGraph<Weighted<BlockPos>, DefaultEdge> graph = (AbstractBaseGraph<Weighted<BlockPos>, DefaultEdge>) copied;
+        AbstractBaseGraph<BlockPos, DefaultEdge> graph = (AbstractBaseGraph<BlockPos, DefaultEdge>) copied;
 
         boolean hasDestination = false;
-        Weighted<BlockPos> destination = null;
+        BlockPos destination = null;
 
         GraphProcessing: while (!graph.vertexSet().isEmpty()) {
-            if (!graph.containsVertex(start)) return;
+            if (!graph.containsVertex(pPos)) return false;
 
-            Iterator<Weighted<BlockPos>> iterator = new BreadthFirstIterator<>(graph, start);
+            Iterator<BlockPos> iterator = new BreadthFirstIterator<>(graph, pPos);
             while (iterator.hasNext()) {
                 destination = iterator.next();
-                if (destination.getValue().getY() < pPos.getY()) {
+                if (destination.getY() < pPos.getY()) {
                     graph.removeVertex(destination);
                     continue GraphProcessing;
                 }
 
-                if (destination.getValue().getY() == pPos.getY() + 1) {
+                if (destination.getY() == pPos.getY() + 1) {
                     hasDestination = true;
                     break GraphProcessing;
                 }
-
-                int density = movementHandler(pLevel).getDensity(destination.getValue()) + pState.getValue(DENSITY);
-                if (
-                        density > MAX_AMOUNT
-                ) {
-                    graph.removeVertex(destination);
-                    continue GraphProcessing;
-                }
             }
 
-            break;
+            return false;
         }
 
-        if (!hasDestination) return;
+        if (!hasDestination) return false;
 
-        BFSShortestPath<Weighted<BlockPos>, DefaultEdge> pathFinder = new BFSShortestPath<>(graph);
+        BFSShortestPath<BlockPos, DefaultEdge> pathFinder = new BFSShortestPath<>(graph);
 
-        GraphPath<Weighted<BlockPos>, DefaultEdge> path = pathFinder.getPath(start, destination);
+        GraphPath<BlockPos, DefaultEdge> path = pathFinder.getPath(pPos, destination);
 
-        if (path.getVertexList().size() <= 1) return;
+        if (path.getVertexList().size() <= 1) return false;
 
-        BlockPos gasDelta = path.getVertexList().get(1).getValue().subtract(pPos);
+        getGasMap(pLevel).putAll(
+                IntStream.range(0, path.getVertexList().size() - 1).mapToObj(
+                        i -> {
+                            BlockPos from = path.getVertexList().get(i);
+                            BlockPos to = path.getVertexList().get(i + 1);
+                            return new Pair<>(from, to);
+                        }
+                ).collect(
+                        Collectors.toMap(
+                                Pair::getFirst,
+                                pair -> Direction.getNearest(
+                                        pair.getSecond().getX() - pair.getFirst().getX(),
+                                        pair.getSecond().getY() - pair.getFirst().getY(),
+                                        pair.getSecond().getZ() - pair.getFirst().getZ()
+                                )
+                        )
+                )
+        );
 
-        movementHandler(pLevel).move(pPos, pState.getValue(DENSITY), Direction.getNearest(gasDelta.getX(), gasDelta.getY(), gasDelta.getZ()));
+        if (!simulated) moveInPath(pLevel, pPos, pState, true);
 
+        return true;
     }
 
-    protected void spreadVertically(LevelAccessor pLevel, BlockPos pPos, FluidState pState) {
-        movementHandler(pLevel).rise(pPos, pState.getValue(FlowingGas.DENSITY));
-        movementHandler(pLevel).graph.addVertex(new Weighted<>(pPos, GasMovementHandler.DEFAULT_VERTEX_WEIGHT));
-        movementHandler(pLevel).graph.addVertex(new Weighted<>(pPos.above(), GasMovementHandler.DEFAULT_VERTEX_WEIGHT));
-        movementHandler(pLevel).graph.addEdge(new Weighted<>(pPos, GasMovementHandler.DEFAULT_VERTEX_WEIGHT), new Weighted<>(pPos.above(), GasMovementHandler.DEFAULT_VERTEX_WEIGHT));
+    protected boolean spreadVertically(LevelAccessor pLevel, BlockPos pPos, FluidState pState, boolean simulate) {
+        if (!canSpreadTo(pLevel, pPos.above())) return false;
+        if (pState.getValue(FlowingGas.DENSITY) > MAX_DENSITY - getMovementHandler(pLevel).getDensity(pPos.above())) return false;
+
+        if (simulate) return true;
+
+        getMovementHandler(pLevel).rise(pPos, Math.min(pState.getValue(FlowingGas.DENSITY), MAX_DENSITY - getMovementHandler(pLevel).getDensity(pPos.above())));
+        getGraph(pLevel).addVertex(pPos);
+        getGraph(pLevel).addVertex(pPos.above());
+        getGraph(pLevel).addEdge(pPos, pPos.above());
+
+        return true;
     }
 
 
 
-    protected boolean spreadHorizontally(LevelAccessor pLevel, BlockPos pPos, FluidState pState, boolean simulate) {
+    protected boolean spreadHorizontally(LevelAccessor pLevel, BlockPos pPos, FluidState pState, boolean simulated) {
         boolean[][] blockedMatrix = new boolean[3][3];
 
         for (Direction direction : Direction.Plane.HORIZONTAL) {
-            if (!canSpreadTo(pLevel, pState, pPos.relative(direction))) {
+            if (!canSpreadTo(pLevel, pPos.relative(direction))) {
                 for (int i = 0; i < 3; i++) {
                     if (direction.getStepX() == 0) {
                         blockedMatrix[i][direction.getStepZ() + 1] = true;
@@ -173,7 +249,7 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
 
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
-                if (!canSpreadTo(pLevel, pState, pPos.relative(Direction.EAST, 2 * i - 1).relative(Direction.SOUTH, 2 * j - 1))) {
+                if (!canSpreadTo(pLevel, pPos.relative(Direction.EAST, 2 * i - 1).relative(Direction.SOUTH, 2 * j - 1))) {
                     blockedMatrix[2 * i][2 * j] = true;
                 }
             }
@@ -189,21 +265,46 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
             for (int j = -1; j < 2; j++) {
                 if (!blockedMatrix[i + 1][j + 1]) {
                     BlockPos newPos = pPos.offset(i, 0, j);
-                    totalDensity += movementHandler(pLevel).getDensity(newPos);
+                    totalDensity += getMovementHandler(pLevel).getDensity(newPos);
                 }
             }
         }
 
-        movementHandler(pLevel).graph.addVertex(new Weighted<>(pPos, GasMovementHandler.DEFAULT_VERTEX_WEIGHT));
+        getGraph(pLevel).addVertex(pPos);
 
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
+                BlockPos newPos = pPos.offset(i, 0, j);
                 if (!blockedMatrix[i + 1][j + 1]) {
-                    BlockPos newPos = pPos.offset(i, 0, j);
-                    if (!newPos.equals(pPos)) {
-                        movementHandler(pLevel).graph.addVertex(new Weighted<>(newPos, GasMovementHandler.DEFAULT_VERTEX_WEIGHT));
-                        movementHandler(pLevel).graph.addEdge(new Weighted<>(pPos, GasMovementHandler.DEFAULT_VERTEX_WEIGHT), new Weighted<>(newPos, GasMovementHandler.DEFAULT_VERTEX_WEIGHT));
+                    Direction dir = Direction.getNearest(
+                            newPos.getX() - pPos.getX(),
+                            newPos.getY() - pPos.getY(),
+                            newPos.getZ() - pPos.getZ()
+                    );
+
+                    BlockPos midPos = pPos.offset(
+                            dir.getStepX(),
+                            dir.getStepY(),
+                            dir.getStepZ()
+                    );
+
+                    if (midPos.equals(newPos)) {
+                        getGraph(pLevel).addVertex(newPos);
+                        getGraph(pLevel).addEdge(pPos, newPos);
+                    } else {
+                        getGraph(pLevel).addVertex(midPos);
+                        getGraph(pLevel).addVertex(newPos);
+                        getGraph(pLevel).addEdge(pPos, midPos);
+                        getGraph(pLevel).addEdge(midPos, newPos);
                     }
+                } else {
+                    if (!newPos.equals(pPos))
+                        getGraph(pLevel).removeEdge(pPos, newPos);
+                    else
+                        throw new IllegalStateException("ERROR: Gas itself is blocked during spreading");
+
+                    if (getGraph(pLevel).containsVertex(newPos) && getGraph(pLevel).outgoingEdgesOf(newPos).isEmpty())
+                        getGraph(pLevel).removeVertex(newPos);
                 }
             }
         }
@@ -217,11 +318,11 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
                     if (i == 0 && j == 0) continue;
                     if (!blockedMatrix[i + 1][j + 1]) {
                         BlockPos newPos = pPos.offset(i, 0, j);
-                        if (totalDensity / openSpaceCount == movementHandler(pLevel).getDensity(newPos)) {
+                        if (totalDensity / openSpaceCount == getMovementHandler(pLevel).getDensity(newPos)) {
                             if (totalDensity / openSpaceCount == 0) return false;
 
                             blockedMatrix[i + 1][j + 1] = true;
-                            totalDensity -= movementHandler(pLevel).getDensity(newPos);
+                            totalDensity -= getMovementHandler(pLevel).getDensity(newPos);
                             openSpaceCount--;
                             executed = true;
                         }
@@ -230,20 +331,22 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
             }
         } while (executed);
 
-        if (openSpaceCount <= 0) throw new IllegalStateException("debug: openSpaceCount <= 0");
+        if (openSpaceCount <= 0) throw new IllegalStateException("ERROR: Gas itself is blocked during spreading");
+
         if (openSpaceCount == 1) return false;
+
         if (totalDensity / openSpaceCount == 0) return false;
 
-        if (simulate) return true;
+        if (simulated) return true;
 
-        movementHandler(pLevel).increase(pPos, totalDensity / openSpaceCount + totalDensity % openSpaceCount - getAmount(pState));
+        getMovementHandler(pLevel).increase(pPos, totalDensity / openSpaceCount + totalDensity % openSpaceCount - getAmount(pState));
 
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 if (i == 0 && j == 0) continue;
                 if (!blockedMatrix[i + 1][j + 1]) {
                     BlockPos newPos = pPos.offset(i, 0, j);
-                    movementHandler(pLevel).increase(newPos, totalDensity / openSpaceCount - movementHandler(pLevel).getDensity(newPos));
+                    getMovementHandler(pLevel).increase(newPos, totalDensity / openSpaceCount - getMovementHandler(pLevel).getDensity(newPos));
                 }
             }
         }
@@ -259,9 +362,9 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
         return super.createLegacyBlock(state).setValue(DENSITY, state.getValue(DENSITY));
     }
 
-    protected boolean canSpreadTo(LevelAccessor pLevel, FluidState state, BlockPos pPos){
-        return movementHandler(pLevel).getDensity(pPos) != -1
-                && movementHandler(pLevel).getDensity(pPos) + getAmount(state) <= MAX_AMOUNT;
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    protected boolean canSpreadTo(LevelAccessor pLevel, BlockPos pPos){
+        return getMovementHandler(pLevel).getDensity(pPos) != -1;
     }
 
 

@@ -30,6 +30,6 @@ public class GasBlock extends LiquidBlock {
     @Override
     public @NotNull FluidState getFluidState(BlockState pState) {
         int level = pState.getValue(DENSITY);
-        return level == FlowingGas.MAX_AMOUNT ? getFluid().getSource(false) : getFluid().getFlowing(level, false);
+        return level == FlowingGas.MAX_DENSITY ? getFluid().getSource(false) : getFluid().getFlowing(level, false);
     }
 }

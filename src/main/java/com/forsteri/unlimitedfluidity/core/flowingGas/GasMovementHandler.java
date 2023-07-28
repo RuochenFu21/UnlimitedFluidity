@@ -19,10 +19,9 @@ public class GasMovementHandler {
     public static final Map<Pair<LevelAccessor, FlowingGas>, GasMovementHandler> handlers = new HashMap<>();
 
     private final LevelAccessor level;
-    public static final int DEFAULT_VERTEX_WEIGHT = 128;
     private final FlowingGas source;
 
-    public final AbstractBaseGraph<Weighted<BlockPos>, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+    public AbstractBaseGraph<BlockPos, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
 
     public GasMovementHandler(LevelAccessor level, FlowingGas source) {
         this.level = level;
@@ -49,7 +48,7 @@ public class GasMovementHandler {
 
             if (operation.movements.stream().anyMatch(movement ->
                     getDensity(movement.getFirst()) == -1 ||
-                    getDensity(movement.getFirst()) + movement.getSecond() > FlowingGas.MAX_AMOUNT ||
+                    getDensity(movement.getFirst()) + movement.getSecond() > FlowingGas.MAX_DENSITY ||
                     getDensity(movement.getFirst()) + movement.getSecond() < 0
             )) {
                 continue;
@@ -63,7 +62,7 @@ public class GasMovementHandler {
 
                 if (resultDensity == 0)
                     level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-                else if (resultDensity == FlowingGas.MAX_AMOUNT)
+                else if (resultDensity == FlowingGas.MAX_DENSITY)
                     level.setBlock(pos, source.getSource().defaultFluidState().createLegacyBlock(), 11);
                 else
                     level.setBlock(pos, source.getFlowing(resultDensity, false).createLegacyBlock(), 11);
