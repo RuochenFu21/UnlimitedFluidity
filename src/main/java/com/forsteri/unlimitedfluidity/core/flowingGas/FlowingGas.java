@@ -1,5 +1,6 @@
 package com.forsteri.unlimitedfluidity.core.flowingGas;
 
+import com.forsteri.unlimitedfluidity.core.Spongability;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,9 +13,8 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-import com.forsteri.unlimitedfluidity.core.Spongability;
-import com.forsteri.unlimitedfluidity.util.Fragments;
 import org.jetbrains.annotations.NotNull;
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.BFSShortestPath;
 import org.jgrapht.graph.AbstractBaseGraph;
@@ -96,11 +96,21 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
             spreadVertically(pLevel, pPos, pState, false);
         else if (moveInPath(pLevel, pPos, pState, true))
             moveInPath(pLevel, pPos, pState, false);
-        else if (spreadHorizontally(pLevel, pPos, pState, true))
-            spreadHorizontally(pLevel, pPos, pState, false);
+        else if (spreadHorizontally(pLevel, pPos, true))
+            spreadHorizontally(pLevel, pPos, false);
         else findAndMoveUp(pLevel, pPos, pState, false);
 
         getMovementHandler(pLevel).tick(pLevel.getLevelData().getDayTime());
+    }
+
+    @Override
+    protected boolean isRandomlyTicking() {
+        return true;
+    }
+
+    @Override
+    protected void randomTick(Level pLevel, BlockPos pPos, FluidState pState, Random pRandom) {
+        spread(pLevel, pPos, pState);
     }
 
     protected static Map<BlockPos, Direction> getGasMap(LevelAccessor level) {
@@ -232,124 +242,77 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
 
 
 
-    protected boolean spreadHorizontally(LevelAccessor pLevel, BlockPos pPos, FluidState pState, boolean simulated) {
-        boolean[][] blockedMatrix = new boolean[3][3];
+    protected boolean spreadHorizontally(LevelAccessor pLevel, BlockPos pPos, boolean simulated) {
+        Graph<BlockPos, DefaultEdge> graph = getGraph(pLevel);
+        int totalDensity = getMovementHandler(pLevel).getDensity(pPos);
+        int space = 1;
+        Map<Direction, Integer> addedAmountMap = new HashMap<>();
 
-        for (Direction direction : Direction.Plane.HORIZONTAL) {
-            if (!canSpreadTo(pLevel, pPos.relative(direction))) {
-                for (int i = 0; i < 3; i++) {
-                    if (direction.getStepX() == 0) {
-                        blockedMatrix[i][direction.getStepZ() + 1] = true;
-                    } else {
-                        blockedMatrix[direction.getStepX() + 1][i] = true;
-                    }
-                }
+        for (Direction direction : Direction.Plane.HORIZONTAL)
+            if (canSpreadTo(pLevel, pPos.relative(direction))) {
+                space++;
+                totalDensity += getMovementHandler(pLevel).getDensity(pPos.relative(direction));
+                addedAmountMap.put(direction, 0);
+
+                for (BlockPos pos : new BlockPos[] {pPos, pPos.relative(direction)})
+                    if (!graph.containsVertex(pos))
+                        graph.addVertex(pos);
+
+                if (!graph.containsEdge(pPos, pPos.relative(direction)))
+                    graph.addEdge(pPos, pPos.relative(direction));
+            } else {
+                if (graph.containsEdge(pPos, pPos.relative(direction)))
+                    graph.removeEdge(pPos, pPos.relative(direction));
+
+                for (BlockPos pos : new BlockPos[] {pPos, pPos.relative(direction)})
+                    if (graph.containsVertex(pos) && graph.edgesOf(pos).isEmpty())
+                        graph.removeVertex(pos);
+
             }
+
+        if (space == 1) return false;
+
+        int each, remainder;
+        each = totalDensity / space;
+        remainder = totalDensity % space;
+
+        addedAmountMap.forEach((direction, amount) ->
+                addedAmountMap.put(direction, each - getMovementHandler(pLevel).getDensity(pPos.relative(direction)))
+        );
+
+        if (remainder != 0) {
+            Set<Direction> remainderDirections = addedAmountMap.keySet();
+            while (true) {
+                Optional<Integer> optionalMin = addedAmountMap.values().stream().min(Integer::compareTo);
+
+                if (optionalMin.isEmpty()) return false;
+
+                Integer min = optionalMin.get();
+
+                //noinspection OptionalGetWithoutIsPresent
+                remainderDirections.remove(addedAmountMap.entrySet().stream().filter(entry -> entry.getValue().equals(min)).findFirst().get().getKey());
+
+                if (remainderDirections.isEmpty()) return false;
+
+                int remainderOfRemainder = remainder % remainderDirections.size();
+
+                if (remainderOfRemainder == 0)
+                    break;
+            }
+
+            remainderDirections.forEach(direction ->
+                    addedAmountMap.put(direction, addedAmountMap.get(direction) + 1)
+            );
         }
 
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                if (!canSpreadTo(pLevel, pPos.relative(Direction.EAST, 2 * i - 1).relative(Direction.SOUTH, 2 * j - 1))) {
-                    blockedMatrix[2 * i][2 * j] = true;
-                }
-            }
-        }
+        addedAmountMap.values().removeIf(amount -> amount == 0);
 
-        int openSpaceCount;
-
-        int totalDensity = 0;
-
-        openSpaceCount = Fragments.countHierarchically(blockedMatrix, (Object object) -> object instanceof Boolean && !(boolean) object);
-
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                if (!blockedMatrix[i + 1][j + 1]) {
-                    BlockPos newPos = pPos.offset(i, 0, j);
-                    totalDensity += getMovementHandler(pLevel).getDensity(newPos);
-                }
-            }
-        }
-
-        getGraph(pLevel).addVertex(pPos);
-
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                BlockPos newPos = pPos.offset(i, 0, j);
-                if (!blockedMatrix[i + 1][j + 1]) {
-                    Direction dir = Direction.getNearest(
-                            newPos.getX() - pPos.getX(),
-                            newPos.getY() - pPos.getY(),
-                            newPos.getZ() - pPos.getZ()
-                    );
-
-                    BlockPos midPos = pPos.offset(
-                            dir.getStepX(),
-                            dir.getStepY(),
-                            dir.getStepZ()
-                    );
-
-                    if (midPos.equals(newPos)) {
-                        getGraph(pLevel).addVertex(newPos);
-                        getGraph(pLevel).addEdge(pPos, newPos);
-                    } else {
-                        getGraph(pLevel).addVertex(midPos);
-                        getGraph(pLevel).addVertex(newPos);
-                        getGraph(pLevel).addEdge(pPos, midPos);
-                        getGraph(pLevel).addEdge(midPos, newPos);
-                    }
-                } else {
-                    if (!newPos.equals(pPos))
-                        getGraph(pLevel).removeEdge(pPos, newPos);
-                    else
-                        throw new IllegalStateException("ERROR: Gas itself is blocked during spreading");
-
-                    if (getGraph(pLevel).containsVertex(newPos) && getGraph(pLevel).outgoingEdgesOf(newPos).isEmpty())
-                        getGraph(pLevel).removeVertex(newPos);
-                }
-            }
-        }
-
-        boolean executed;
-
-        do {
-            executed = false;
-            for (int i = -1; i < 2; i++) {
-                for (int j = -1; j < 2; j++) {
-                    if (i == 0 && j == 0) continue;
-                    if (!blockedMatrix[i + 1][j + 1]) {
-                        BlockPos newPos = pPos.offset(i, 0, j);
-                        if (totalDensity / openSpaceCount == getMovementHandler(pLevel).getDensity(newPos)) {
-                            if (totalDensity / openSpaceCount == 0) return false;
-
-                            blockedMatrix[i + 1][j + 1] = true;
-                            totalDensity -= getMovementHandler(pLevel).getDensity(newPos);
-                            openSpaceCount--;
-                            executed = true;
-                        }
-                    }
-                }
-            }
-        } while (executed);
-
-        if (openSpaceCount <= 0) throw new IllegalStateException("ERROR: Gas itself is blocked during spreading");
-
-        if (openSpaceCount == 1) return false;
-
-        if (totalDensity / openSpaceCount == 0) return false;
+        if (addedAmountMap.isEmpty()) return false;
 
         if (simulated) return true;
 
-        getMovementHandler(pLevel).increase(pPos, totalDensity / openSpaceCount + totalDensity % openSpaceCount - getAmount(pState));
-
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                if (i == 0 && j == 0) continue;
-                if (!blockedMatrix[i + 1][j + 1]) {
-                    BlockPos newPos = pPos.offset(i, 0, j);
-                    getMovementHandler(pLevel).increase(newPos, totalDensity / openSpaceCount - getMovementHandler(pLevel).getDensity(newPos));
-                }
-            }
-        }
+        for (Map.Entry<Direction, Integer> entry : addedAmountMap.entrySet())
+            getMovementHandler(pLevel).move(pPos, entry.getValue(), entry.getKey());
 
         return true;
     }

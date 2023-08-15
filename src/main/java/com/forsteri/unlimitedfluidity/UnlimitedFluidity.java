@@ -39,6 +39,7 @@ public class UnlimitedFluidity {
                                         .executes(context -> {
                                             GasMovementHandler.handlers.keySet().forEach(
                                                     pair -> {
+                                                        // TODO: Check which one effects the most
                                                         GasMovementHandler.getOrCreate(pair.getFirst(), context.getArgument("gas", FlowingGas.class)).graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
                                                         FlowingGas.gasMovementMap.get(pair.getFirst()).clear();
                                                     }
