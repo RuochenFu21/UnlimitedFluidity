@@ -1,6 +1,8 @@
-package com.forsteri.unlimitedfluidity.mixin;
+package com.forsteri.unlimitedfluidity.mixin.behavioreffect;
 
-import com.forsteri.unlimitedfluidity.core.Viscosity;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableFluid;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.swimming.ISwimmingFluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.viscosity.IViscosityFluidBehavior;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Nameable;
@@ -9,7 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityAccess;
 import net.minecraft.world.phys.Vec3;
-import com.forsteri.unlimitedfluidity.core.Swimable;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.swimming.SwimmingFluidBehaviorImpl;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,13 +35,16 @@ public abstract class MixinEntityMovement extends net.minecraftforge.common.capa
 
     @Inject(method = "checkInsideBlocks", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;entityInside(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;)V"))
     private void SlowdownInsideBlock(CallbackInfo ci) {
-        if (level.getFluidState(new BlockPos(position)).getType() instanceof Viscosity fluid) {
+        IViscosityFluidBehavior behavior;
+
+        if (level.getFluidState(new BlockPos(position)).getType() instanceof BehaviorableFluid fluid
+        && (behavior = fluid.getBehavior(IViscosityFluidBehavior.class)) != null) {
             this.makeStuckInBlock(
                     level.getBlockState(new BlockPos(position)),
                     new Vec3(
-                            1f/fluid.getViscosity(),
-                            1f/fluid.getViscosity(),
-                            1f/fluid.getViscosity()
+                            1f/behavior.viscosity(),
+                            1f/behavior.viscosity(),
+                            1f/behavior.viscosity()
                     )
             );
         }
@@ -47,9 +52,14 @@ public abstract class MixinEntityMovement extends net.minecraftforge.common.capa
 
     @Redirect(method = "updateSwimming", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isInWater()Z"))
     private boolean swimInWaterRedirect(Entity instance){
-        if (level.getFluidState(new BlockPos(position)).getType() instanceof Swimable fluid && fluid.canSwim()) {
+        ISwimmingFluidBehavior behavior;
+
+        if (level.getFluidState(new BlockPos(position)).getType() instanceof BehaviorableFluid fluid
+                && (behavior = fluid.getBehavior(ISwimmingFluidBehavior.class)) != null
+                && behavior.canSwim()) {
             return true;
         }
+
         return isInWater();
     }
 }

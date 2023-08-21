@@ -1,9 +1,15 @@
-package com.forsteri.unlimitedfluidity.core.flowingGas;
+package com.forsteri.unlimitedfluidity.core.flowinggas;
 
-import com.forsteri.unlimitedfluidity.core.Spongability;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.FluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.sponging.SpongingFluidBehaviorImpl;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.FastColor;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.AirBlock;
@@ -13,6 +19,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
+import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -27,10 +34,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @ParametersAreNonnullByDefault
-public abstract class FlowingGas extends ForgeFlowingFluid implements Spongability {
-    public boolean spongable(){
-        return true;
-    }
+public abstract class FlowingGas extends ForgeFlowingFluid {
     public static final int MAX_DENSITY = 128;
     public static final IntegerProperty DENSITY = IntegerProperty.create("density", 1, MAX_DENSITY);
     public static final Map<LevelAccessor, Map<BlockPos, Direction>> gasMovementMap = new HashMap<>();
@@ -53,6 +57,7 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
 
     protected FlowingGas(ForgeFlowingFluid.Properties properties) {
         super(properties);
+
         if (this.isSource(this.defaultFluidState())) {
             this.registerDefaultState(this.getStateDefinition().any()
                     .setValue(DENSITY, MAX_DENSITY)
@@ -67,17 +72,11 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
 
     @Override
     public void tick(Level pLevel, BlockPos pPos, FluidState pState) {
+         super.tick(pLevel, pPos, pState);
+
         if (pLevel.isClientSide) return;
 
         this.spread(pLevel, pPos, pState);
-    }
-
-    protected void spreadTo(LevelAccessor pLevel, BlockPos pPos, BlockState pBlockState, Direction pDirection, FluidState pFluidState) {
-        if (!pBlockState.isAir()) {
-            this.beforeDestroyingBlock(pLevel, pPos, pBlockState);
-        }
-        pLevel.setBlock(pPos, pFluidState.createLegacyBlock(), 3);
-
     }
 
     public GasMovementHandler getMovementHandler(LevelAccessor level) {
@@ -240,8 +239,6 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
         return true;
     }
 
-
-
     protected boolean spreadHorizontally(LevelAccessor pLevel, BlockPos pPos, boolean simulated) {
         Graph<BlockPos, DefaultEdge> graph = getGraph(pLevel);
         int totalDensity = getMovementHandler(pLevel).getDensity(pPos);
@@ -325,11 +322,11 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
         return super.createLegacyBlock(state).setValue(DENSITY, state.getValue(DENSITY));
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     protected boolean canSpreadTo(LevelAccessor pLevel, BlockPos pPos){
         return getMovementHandler(pLevel).getDensity(pPos) != -1;
     }
 
+    // HERE: temporary
 
     protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
         super.createFluidStateDefinition(builder);
@@ -337,6 +334,15 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
             builder.add(LEVEL);
         builder.add(DENSITY);
     }
+
+    protected abstract boolean isSource();
+
+    @Override
+    public boolean isSource(@NotNull FluidState p_76140_) {
+        return isSource();
+    }
+
+    // HERE: end
 
     public @NotNull FluidState getFlowing(int p_75954_, boolean p_75955_) {
         return this.getFlowing().defaultFluidState().setValue(DENSITY, p_75954_).setValue(FALLING, p_75955_);
@@ -347,11 +353,42 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
         return pState.hasProperty(DENSITY) ? pState.getValue(DENSITY) : 0;
     }
 
-    abstract boolean isSource();
-
     @Override
-    public boolean isSource(FluidState p_76140_) {
-        return isSource();
+    protected void animateTick(Level p_76116_, BlockPos pPos, FluidState p_76118_, Random p_76119_) {
+        if (!(p_76118_.getType() instanceof FlowingGas gas))
+            return;
+
+        render(p_76116_, pPos, gas);
+    }
+
+    public static void render(BlockAndTintGetter pLevel, BlockPos pPos, FlowingGas gas) {
+        ArrayList<Triple<Double, Double, Double>> particleDirections = new ArrayList<>();
+
+        particleDirections.add(Triple.of(0D, 0D, 0D));
+
+        if (canSpreadTo(pLevel, pPos, gas, Direction.UP))
+            particleDirections.add(Triple.of(0D, 1/16D, 0D));
+        else
+            for (Direction dir : Direction.Plane.HORIZONTAL)
+                if (canSpreadTo(pLevel, pPos, gas, dir))
+                    particleDirections.add(Triple.of(dir.getStepX()/16D, 0D, dir.getStepZ()/16D));
+        for (int i = 0; i < 3; i++)
+            for (Triple<Double, Double, Double> direction : particleDirections) {
+                Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.CLOUD,pPos.getX() + Math.random(), pPos.getY() + Math.random(), pPos.getZ() + Math.random(), direction.getLeft(), direction.getMiddle(), direction.getRight());
+                assert particle != null;
+                particle.setAlpha(0.2f);
+                int color = gas.getAttributes().getColor(pLevel, pPos);
+
+                particle.setColor(FastColor.ARGB32.red(color) / 256f, FastColor.ARGB32.green(color) / 256f, FastColor.ARGB32.blue(color) / 256f);
+                particle.setLifetime(160);
+            }
+    }
+
+    private static boolean canSpreadTo(BlockAndTintGetter pTint, BlockPos pPos, FlowingGas gas, Direction direction) {
+        BlockState state = pTint.getBlockState(pPos.relative(direction));
+        if (state.getFluidState().is(gas.getSource())) return true;
+        if (state.getFluidState().is(gas.getFlowing())) return true;
+        return state.canBeReplaced(gas);
     }
 
     public static class Flowing extends FlowingGas {
@@ -360,7 +397,7 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
         }
 
         @Override
-        boolean isSource() {
+        public boolean isSource() {
             return false;
         }
     }
@@ -371,9 +408,16 @@ public abstract class FlowingGas extends ForgeFlowingFluid implements Spongabili
         }
 
         @Override
-        boolean isSource() {
+        public boolean isSource() {
             return true;
         }
+    }
+
+//    @Override
+    public List<FluidBehavior> getBehaviors() {
+        List<FluidBehavior> behaviors = new ArrayList<>();
+        behaviors.add(new SpongingFluidBehaviorImpl());
+        return behaviors;
     }
 }
 

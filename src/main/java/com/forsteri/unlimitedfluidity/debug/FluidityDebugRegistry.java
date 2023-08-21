@@ -1,8 +1,8 @@
 package com.forsteri.unlimitedfluidity.debug;
 
 import com.forsteri.unlimitedfluidity.UnlimitedFluidity;
-import com.forsteri.unlimitedfluidity.core.flowingGas.FlowingGas;
-import com.forsteri.unlimitedfluidity.core.flowingGas.GasBlock;
+import com.forsteri.unlimitedfluidity.core.flowinggas.FlowingGas;
+import com.forsteri.unlimitedfluidity.core.flowinggas.GasBlock;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -20,7 +20,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class DebugRegistry {
+public class FluidityDebugRegistry {
     public static final DeferredRegister<Fluid> FLUIDS =
             DeferredRegister.create(ForgeRegistries.FLUIDS, UnlimitedFluidity.MOD_ID);
 
@@ -34,9 +34,9 @@ public class DebugRegistry {
     public static final ResourceLocation WATER_OVERLAY_RL = new ResourceLocation("block/water_overlay");
 
     public static RegistryObject<FlowingFluid>
-            DEBUG_FLUID = DebugRegistry.FLUIDS.register("debug_fluid", () -> new FlowingGas.Source(DebugRegistry.DEBUG_FLUID_PROPERTY)),
+            DEBUG_FLUID = FluidityDebugRegistry.FLUIDS.register("debug_fluid", () -> new FlowingGas.Source(FluidityDebugRegistry.DEBUG_FLUID_PROPERTY)),
 
-            DEBUG_FLUID_FLOWING = DebugRegistry.FLUIDS.register("debug_fluid_flowing", () -> new FlowingGas.Flowing(DebugRegistry.DEBUG_FLUID_PROPERTY));
+            DEBUG_FLUID_FLOWING = FluidityDebugRegistry.FLUIDS.register("debug_fluid_flowing", () -> new FlowingGas.Flowing(FluidityDebugRegistry.DEBUG_FLUID_PROPERTY));
 
     public static ForgeFlowingFluid.Properties DEBUG_FLUID_PROPERTY = new ForgeFlowingFluid.Properties(
             () -> DEBUG_FLUID.get(),
@@ -44,15 +44,15 @@ public class DebugRegistry {
             FluidAttributes.builder(WATER_STILL_RL, WATER_FLOWING_RL)
                     .density(15).luminosity(2).viscosity(5).overlay(WATER_OVERLAY_RL)
                     .color(0xbffcba03)).slopeFindDistance(0).levelDecreasePerBlock(0).tickRate(2)
-            .block(() -> DebugRegistry.DEBUG_FLUID_BLOCK.get()).bucket(() -> DebugRegistry.DEBUG_FLUID_BUCKET.get()
+            .block(() -> FluidityDebugRegistry.DEBUG_FLUID_BLOCK.get()).bucket(() -> FluidityDebugRegistry.DEBUG_FLUID_BUCKET.get()
             );
 
-    public static RegistryObject<LiquidBlock> DEBUG_FLUID_BLOCK = DebugRegistry.BLOCKS.register("debug_fluid_block",
-            () -> new GasBlock(() -> DebugRegistry.DEBUG_FLUID.get(), BlockBehaviour.Properties.of(Material.WATER)
+    public static RegistryObject<LiquidBlock> DEBUG_FLUID_BLOCK = FluidityDebugRegistry.BLOCKS.register("debug_fluid_block",
+            () -> new GasBlock(() -> FluidityDebugRegistry.DEBUG_FLUID.get(), BlockBehaviour.Properties.of(Material.WATER)
                     .noCollission().strength(100f).noDrops()));
 
-    public static RegistryObject<Item> DEBUG_FLUID_BUCKET = DebugRegistry.ITEMS.register("debug_fluid_bucket",
-            () -> new BucketItem(DebugRegistry.DEBUG_FLUID,
+    public static RegistryObject<Item> DEBUG_FLUID_BUCKET = FluidityDebugRegistry.ITEMS.register("debug_fluid_bucket",
+            () -> new BucketItem(FluidityDebugRegistry.DEBUG_FLUID,
                     new Item.Properties().tab(CreativeModeTab.TAB_MISC).stacksTo(1)));
 
     public static void register(IEventBus modEventBus) {

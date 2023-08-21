@@ -5,8 +5,10 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "UnlimitedFluidity.refmap.json",
   "mixins": [
-    "MixinEntityMovement",
-    "MixinSponge"
+    "MixinLiquidBlockRenderer",
+    "behavioreffect.MixinConcretePowderBlock",
+    "behavioreffect.MixinEntityMovement",
+    "behavioreffect.MixinSponge"
   ],
   "client": [
   ],

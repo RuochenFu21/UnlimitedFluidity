@@ -1,8 +1,8 @@
 package com.forsteri.unlimitedfluidity;
 
-import com.forsteri.unlimitedfluidity.core.flowingGas.FlowingGas;
-import com.forsteri.unlimitedfluidity.core.flowingGas.GasMovementHandler;
-import com.forsteri.unlimitedfluidity.core.flowingGas.command.GasTypeArgument;
+import com.forsteri.unlimitedfluidity.core.flowinggas.FlowingGas;
+import com.forsteri.unlimitedfluidity.core.flowinggas.GasMovementHandler;
+import com.forsteri.unlimitedfluidity.core.flowinggas.command.GasTypeArgument;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.common.MinecraftForge;
@@ -11,8 +11,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import com.forsteri.unlimitedfluidity.core.ModParticles;
-import com.forsteri.unlimitedfluidity.debug.DebugRegistry;
+import com.forsteri.unlimitedfluidity.debug.FluidityDebugRegistry;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultUndirectedGraph;
 
@@ -23,8 +22,7 @@ public class UnlimitedFluidity {
     public UnlimitedFluidity() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        ModParticles.register(eventBus);
-        DebugRegistry.register(eventBus);
+        FluidityDebugRegistry.register(eventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
     }

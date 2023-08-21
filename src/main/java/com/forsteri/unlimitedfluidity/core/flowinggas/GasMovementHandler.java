@@ -1,4 +1,4 @@
-package com.forsteri.unlimitedfluidity.core.flowingGas;
+package com.forsteri.unlimitedfluidity.core.flowinggas;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
@@ -39,7 +39,6 @@ public class GasMovementHandler {
     public void tick(long tick) {
         if (tick >= lastTick) {
             lastTick = tick;
-//            graph
         }
 
         while (!operations.isEmpty()) {
@@ -74,7 +73,7 @@ public class GasMovementHandler {
         BlockState state = level.getBlockState(pos);
         if (state.getFluidState().is(source.getSource())) return state.getValue(FlowingGas.DENSITY);
         if (state.getFluidState().is(source.getFlowing())) return state.getValue(FlowingGas.DENSITY);
-        return level.getBlockState(pos).canBeReplaced(source) ? 0 : -1;
+        return state.canBeReplaced(source) ? 0 : -1;
     }
 
     public void rise(BlockPos pos, int density) {
@@ -85,11 +84,6 @@ public class GasMovementHandler {
         operations.add(GasMovement.create()
                 .decrease(pos, density)
                 .increase(pos.relative(direction), density));
-    }
-
-    public void increase(BlockPos pos, int density) {
-        operations.add(GasMovement.create()
-                .increase(pos, density));
     }
 
     private static class GasMovement {

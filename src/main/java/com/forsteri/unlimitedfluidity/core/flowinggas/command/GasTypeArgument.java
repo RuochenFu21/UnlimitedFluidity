@@ -1,6 +1,6 @@
-package com.forsteri.unlimitedfluidity.core.flowingGas.command;
+package com.forsteri.unlimitedfluidity.core.flowinggas.command;
 
-import com.forsteri.unlimitedfluidity.core.flowingGas.FlowingGas;
+import com.forsteri.unlimitedfluidity.core.flowinggas.FlowingGas;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
