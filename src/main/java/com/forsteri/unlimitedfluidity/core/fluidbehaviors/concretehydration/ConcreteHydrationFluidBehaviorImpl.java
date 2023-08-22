@@ -8,9 +8,9 @@ package com.forsteri.unlimitedfluidity.core.fluidbehaviors.concretehydration;
 public record ConcreteHydrationFluidBehaviorImpl(boolean canHydrate) implements IConcreteHydrationFluidBehavior {
     /**
      * @since       1.1
-     * For Custom fluid that allows concrete hydration
+     * For Custom fluid that don't concrete hydration
      */
     public ConcreteHydrationFluidBehaviorImpl() {
-        this(true);
+        this(false);
     }
 }

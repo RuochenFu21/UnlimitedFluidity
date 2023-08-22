@@ -107,6 +107,6 @@ public class GasMovementHandler {
     }
 
     public static GasMovementHandler getOrCreate(LevelAccessor level, FlowingGas gas) {
-        return handlers.computeIfAbsent(Pair.of(level, gas.getSource()), GasMovementHandler::new);
+        return handlers.computeIfAbsent(Pair.of(level, (FlowingGas) gas.getSource()), GasMovementHandler::new);
     }
 }

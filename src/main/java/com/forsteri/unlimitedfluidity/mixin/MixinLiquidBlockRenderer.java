@@ -16,10 +16,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinLiquidBlockRenderer {
     @Inject(method = "tesselate", at = @At("HEAD"), cancellable = true)
     private void tesselate(BlockAndTintGetter pTint, BlockPos pPos, VertexConsumer pConsumer, BlockState pState, FluidState pFluidState, CallbackInfoReturnable<Boolean> cir) {
-        if (!(pFluidState.getType() instanceof FlowingGas gas))
+        if (!(pFluidState.getType() instanceof FlowingGas))
             return;
 
-        FlowingGas.render(pTint, pPos, gas);
-//        cir.setReturnValue(true);
+        cir.setReturnValue(true);
     }
 }

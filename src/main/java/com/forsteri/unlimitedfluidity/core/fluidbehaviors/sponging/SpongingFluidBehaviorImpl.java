@@ -8,9 +8,9 @@ package com.forsteri.unlimitedfluidity.core.fluidbehaviors.sponging;
 public record SpongingFluidBehaviorImpl(boolean canSponge) implements ISpongingFluidBehavior {
     /**
      * @since       1.1
-     * For Custom fluid that allows fluid to be sponged
+     * For Custom fluid that don't allow fluid to be sponged
      */
     public SpongingFluidBehaviorImpl() {
-        this(true);
+        this(false);
     }
 }

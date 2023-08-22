@@ -1,6 +1,8 @@
 package com.forsteri.unlimitedfluidity.core.flowinggas;
 
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableFluid;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.FluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.farmlandhydration.FarmLandHydrationFluidBehaviorImpl;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.sponging.SpongingFluidBehaviorImpl;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
@@ -34,26 +36,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @ParametersAreNonnullByDefault
-public abstract class FlowingGas extends ForgeFlowingFluid {
+public abstract class FlowingGas extends BehaviorableFluid {
     public static final int MAX_DENSITY = 128;
     public static final IntegerProperty DENSITY = IntegerProperty.create("density", 1, MAX_DENSITY);
     public static final Map<LevelAccessor, Map<BlockPos, Direction>> gasMovementMap = new HashMap<>();
-
-    @Override
-    public FlowingGas getSource() {
-        if (!(super.getSource() instanceof FlowingGas flowingGas))
-            throw new IllegalStateException("Source of this gas is not a gas!");
-
-        return flowingGas;
-    }
-
-    @Override
-    public FlowingGas getFlowing() {
-        if (!(super.getFlowing() instanceof FlowingGas flowingGas))
-            throw new IllegalStateException("Flowing state of this gas is not a gas!");
-
-        return flowingGas;
-    }
 
     protected FlowingGas(ForgeFlowingFluid.Properties properties) {
         super(properties);
@@ -71,12 +57,12 @@ public abstract class FlowingGas extends ForgeFlowingFluid {
     }
 
     @Override
-    public void tick(Level pLevel, BlockPos pPos, FluidState pState) {
-         super.tick(pLevel, pPos, pState);
+    public void tick(Level worldIn, BlockPos pos, FluidState state) {
+        super.tick(worldIn, pos, state);
 
-        if (pLevel.isClientSide) return;
+        if (worldIn.isClientSide) return;
 
-        this.spread(pLevel, pPos, pState);
+        this.spread(worldIn, pos, state);
     }
 
     public GasMovementHandler getMovementHandler(LevelAccessor level) {
@@ -231,6 +217,9 @@ public abstract class FlowingGas extends ForgeFlowingFluid {
 
         if (simulate) return true;
 
+        if (!pLevel.getBlockState(pPos.above()).isAir())
+            beforeDestroyingBlock(pLevel, pPos.above(), pLevel.getBlockState(pPos.above()));
+
         getMovementHandler(pLevel).rise(pPos, Math.min(pState.getValue(FlowingGas.DENSITY), MAX_DENSITY - getMovementHandler(pLevel).getDensity(pPos.above())));
         getGraph(pLevel).addVertex(pPos);
         getGraph(pLevel).addVertex(pPos.above());
@@ -308,8 +297,13 @@ public abstract class FlowingGas extends ForgeFlowingFluid {
 
         if (simulated) return true;
 
-        for (Map.Entry<Direction, Integer> entry : addedAmountMap.entrySet())
+        for (Map.Entry<Direction, Integer> entry : addedAmountMap.entrySet()) {
+            BlockPos pos = pPos.relative(entry.getKey());
+            if (!pLevel.getBlockState(pos).isAir())
+                beforeDestroyingBlock(pLevel, pos, pLevel.getBlockState(pos));
+
             getMovementHandler(pLevel).move(pPos, entry.getValue(), entry.getKey());
+        }
 
         return true;
     }
@@ -326,23 +320,10 @@ public abstract class FlowingGas extends ForgeFlowingFluid {
         return getMovementHandler(pLevel).getDensity(pPos) != -1;
     }
 
-    // HERE: temporary
-
     protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
         super.createFluidStateDefinition(builder);
-        if (!this.isSource(this.defaultFluidState()))
-            builder.add(LEVEL);
         builder.add(DENSITY);
     }
-
-    protected abstract boolean isSource();
-
-    @Override
-    public boolean isSource(@NotNull FluidState p_76140_) {
-        return isSource();
-    }
-
-    // HERE: end
 
     public @NotNull FluidState getFlowing(int p_75954_, boolean p_75955_) {
         return this.getFlowing().defaultFluidState().setValue(DENSITY, p_75954_).setValue(FALLING, p_75955_);
@@ -358,10 +339,10 @@ public abstract class FlowingGas extends ForgeFlowingFluid {
         if (!(p_76118_.getType() instanceof FlowingGas gas))
             return;
 
-        render(p_76116_, pPos, gas);
+        render(p_76116_, pPos, gas, 3, 160);
     }
 
-    public static void render(BlockAndTintGetter pLevel, BlockPos pPos, FlowingGas gas) {
+    public static void render(BlockAndTintGetter pLevel, BlockPos pPos, FlowingGas gas, int amount, int time) {
         ArrayList<Triple<Double, Double, Double>> particleDirections = new ArrayList<>();
 
         particleDirections.add(Triple.of(0D, 0D, 0D));
@@ -372,7 +353,8 @@ public abstract class FlowingGas extends ForgeFlowingFluid {
             for (Direction dir : Direction.Plane.HORIZONTAL)
                 if (canSpreadTo(pLevel, pPos, gas, dir))
                     particleDirections.add(Triple.of(dir.getStepX()/16D, 0D, dir.getStepZ()/16D));
-        for (int i = 0; i < 3; i++)
+
+        for (int i = 0; i < amount; i++)
             for (Triple<Double, Double, Double> direction : particleDirections) {
                 Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.CLOUD,pPos.getX() + Math.random(), pPos.getY() + Math.random(), pPos.getZ() + Math.random(), direction.getLeft(), direction.getMiddle(), direction.getRight());
                 assert particle != null;
@@ -380,7 +362,7 @@ public abstract class FlowingGas extends ForgeFlowingFluid {
                 int color = gas.getAttributes().getColor(pLevel, pPos);
 
                 particle.setColor(FastColor.ARGB32.red(color) / 256f, FastColor.ARGB32.green(color) / 256f, FastColor.ARGB32.blue(color) / 256f);
-                particle.setLifetime(160);
+                particle.setLifetime(time);
             }
     }
 
@@ -413,10 +395,21 @@ public abstract class FlowingGas extends ForgeFlowingFluid {
         }
     }
 
-//    @Override
+    @Override
     public List<FluidBehavior> getBehaviors() {
         List<FluidBehavior> behaviors = new ArrayList<>();
-        behaviors.add(new SpongingFluidBehaviorImpl());
+
+        // Temporary STARTS
+        behaviors.add(new SpongingFluidBehaviorImpl(true));
+        behaviors.add(new FarmLandHydrationFluidBehaviorImpl(true));
+        // Temporary ENDS
+
+        behaviors.add(new FluidBehavior() {
+            @Override
+            public boolean tick(Level p_76113_, BlockPos p_76114_, FluidState p_76115_) {
+                return true;
+            }
+        });
         return behaviors;
     }
 }

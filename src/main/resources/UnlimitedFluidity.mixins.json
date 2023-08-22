@@ -8,6 +8,7 @@
     "MixinLiquidBlockRenderer",
     "behavioreffect.MixinConcretePowderBlock",
     "behavioreffect.MixinEntityMovement",
+    "behavioreffect.MixinFarmBlock",
     "behavioreffect.MixinSponge"
   ],
   "client": [

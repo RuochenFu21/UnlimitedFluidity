@@ -3,6 +3,8 @@ package com.forsteri.unlimitedfluidity.core.fluidbehaviors;
 import com.forsteri.unlimitedfluidity.core.SmartFluid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,11 +17,19 @@ public abstract class BehaviorableFluid extends SmartFluid {
     }
 
     @Override
-    public void tick(@NotNull Level p_76113_, @NotNull BlockPos p_76114_, @NotNull FluidState p_76115_) {
-        if (getBehaviors().stream().anyMatch(behavior -> behavior.tick(p_76113_, p_76114_, p_76115_)))
+    public void tick(@NotNull Level worldIn, @NotNull BlockPos pos, @NotNull FluidState state) {
+        if (getBehaviors().stream().anyMatch(behavior -> behavior.tick(worldIn, pos, state)))
             return;
 
-        super.tick(p_76113_, p_76114_, p_76115_);
+        super.tick(worldIn, pos, state);
+    }
+
+    @Override
+    protected void beforeDestroyingBlock(LevelAccessor worldIn, BlockPos pos, BlockState state) {
+        if (getBehaviors().stream().anyMatch(behavior -> behavior.beforeDestroyingBlock(worldIn, pos, state)))
+            return;
+
+        super.beforeDestroyingBlock(worldIn, pos, state);
     }
 
     protected List<FluidBehavior> getBehaviors() {
