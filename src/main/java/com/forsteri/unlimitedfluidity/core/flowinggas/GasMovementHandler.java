@@ -76,10 +76,6 @@ public class GasMovementHandler {
         return state.canBeReplaced(source) ? 0 : -1;
     }
 
-    public void rise(BlockPos pos, int density) {
-        move(pos, density, Direction.UP);
-    }
-
     public void move(BlockPos pos, int density, Direction direction) {
         operations.add(GasMovement.create()
                 .decrease(pos, density)

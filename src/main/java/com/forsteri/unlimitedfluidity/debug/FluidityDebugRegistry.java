@@ -2,6 +2,7 @@ package com.forsteri.unlimitedfluidity.debug;
 
 import com.forsteri.unlimitedfluidity.UnlimitedFluidity;
 import com.forsteri.unlimitedfluidity.core.flowinggas.FlowingGas;
+import com.forsteri.unlimitedfluidity.core.flowinggas.FlowingGas.Properties.GasFlowDirection;
 import com.forsteri.unlimitedfluidity.core.flowinggas.GasBlock;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
@@ -15,7 +16,6 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fluids.FluidAttributes;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -38,14 +38,13 @@ public class FluidityDebugRegistry {
 
             DEBUG_FLUID_FLOWING = FluidityDebugRegistry.FLUIDS.register("debug_fluid_flowing", () -> new FlowingGas.Flowing(FluidityDebugRegistry.DEBUG_FLUID_PROPERTY));
 
-    public static ForgeFlowingFluid.Properties DEBUG_FLUID_PROPERTY = new ForgeFlowingFluid.Properties(
+    public static FlowingGas.Properties DEBUG_FLUID_PROPERTY = new FlowingGas.Properties(
             () -> DEBUG_FLUID.get(),
             () -> DEBUG_FLUID_FLOWING.get(),
             FluidAttributes.builder(WATER_STILL_RL, WATER_FLOWING_RL)
                     .density(15).luminosity(2).viscosity(5).overlay(WATER_OVERLAY_RL)
-                    .color(0xbffcba03)).slopeFindDistance(0).levelDecreasePerBlock(0).tickRate(2)
-            .block(() -> FluidityDebugRegistry.DEBUG_FLUID_BLOCK.get()).bucket(() -> FluidityDebugRegistry.DEBUG_FLUID_BUCKET.get()
-            );
+                    .color(0xbffcba03)).tickRate(2)
+            .block(() -> FluidityDebugRegistry.DEBUG_FLUID_BLOCK.get()).bucket(() -> FluidityDebugRegistry.DEBUG_FLUID_BUCKET.get()).gasFlowDirection(GasFlowDirection.UP);
 
     public static RegistryObject<LiquidBlock> DEBUG_FLUID_BLOCK = FluidityDebugRegistry.BLOCKS.register("debug_fluid_block",
             () -> new GasBlock(() -> FluidityDebugRegistry.DEBUG_FLUID.get(), BlockBehaviour.Properties.of(Material.WATER)

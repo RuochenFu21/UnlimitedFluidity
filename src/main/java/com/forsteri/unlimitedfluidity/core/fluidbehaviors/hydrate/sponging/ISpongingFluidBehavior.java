@@ -1,4 +1,4 @@
-package com.forsteri.unlimitedfluidity.core.fluidbehaviors.sponging;
+package com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging;
 
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.FluidBehavior;
 

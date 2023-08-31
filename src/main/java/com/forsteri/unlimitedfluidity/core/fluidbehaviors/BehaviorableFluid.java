@@ -36,8 +36,8 @@ public abstract class BehaviorableFluid extends SmartFluid {
         return new ArrayList<>();
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends FluidBehavior> T getBehavior(Class<T> behavior) {
-        //noinspection unchecked
         return (T) getBehaviors().stream().filter(behavior::isInstance).findFirst().orElse(null);
     }
 }

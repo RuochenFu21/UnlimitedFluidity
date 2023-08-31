@@ -9,7 +9,8 @@
     "behavioreffect.MixinConcretePowderBlock",
     "behavioreffect.MixinEntityMovement",
     "behavioreffect.MixinFarmBlock",
-    "behavioreffect.MixinSponge"
+    "behavioreffect.MixinSponge",
+    "behavioreffect.MixinSugarCaneBlock"
   ],
   "client": [
   ],

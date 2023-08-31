@@ -1,9 +1,8 @@
 package com.forsteri.unlimitedfluidity.mixin.behavioreffect;
 
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableFluid;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.sponging.ISpongingFluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging.ISpongingFluidBehavior;
 import net.minecraft.world.level.block.SpongeBlock;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.sponging.SpongingFluidBehaviorImpl;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

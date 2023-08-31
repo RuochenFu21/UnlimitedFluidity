@@ -1,7 +1,7 @@
 package com.forsteri.unlimitedfluidity.mixin.behavioreffect;
 
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableFluid;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.concretehydration.IConcreteHydrationFluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.concretehydration.IConcreteHydrationFluidBehavior;
 import net.minecraft.world.level.block.ConcretePowderBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,7 +14,7 @@ public class MixinConcretePowderBlock {
         IConcreteHydrationFluidBehavior behavior;
         if (fluidState.getType() instanceof BehaviorableFluid fluid
                 && (behavior = fluid.getBehavior(IConcreteHydrationFluidBehavior.class)) != null
-                && behavior.canHydrate()) {
+                && behavior.canHydrateConcrete()) {
             return true;
         }
         return fluidState.is(tagKey);

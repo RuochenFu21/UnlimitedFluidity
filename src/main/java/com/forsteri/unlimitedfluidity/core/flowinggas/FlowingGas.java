@@ -2,8 +2,7 @@ package com.forsteri.unlimitedfluidity.core.flowinggas;
 
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableFluid;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.FluidBehavior;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.farmlandhydration.FarmLandHydrationFluidBehaviorImpl;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.sponging.SpongingFluidBehaviorImpl;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.HydrateBehavior;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -11,15 +10,21 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.FastColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +37,7 @@ import org.jgrapht.traverse.BreadthFirstIterator;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -41,8 +47,12 @@ public abstract class FlowingGas extends BehaviorableFluid {
     public static final IntegerProperty DENSITY = IntegerProperty.create("density", 1, MAX_DENSITY);
     public static final Map<LevelAccessor, Map<BlockPos, Direction>> gasMovementMap = new HashMap<>();
 
-    protected FlowingGas(ForgeFlowingFluid.Properties properties) {
+    protected final Direction flowDirection;
+
+    protected FlowingGas(Properties properties) {
         super(properties);
+
+        this.flowDirection = properties.gasFlowDirection.direction;
 
         if (this.isSource(this.defaultFluidState())) {
             this.registerDefaultState(this.getStateDefinition().any()
@@ -83,7 +93,10 @@ public abstract class FlowingGas extends BehaviorableFluid {
             moveInPath(pLevel, pPos, pState, false);
         else if (spreadHorizontally(pLevel, pPos, true))
             spreadHorizontally(pLevel, pPos, false);
-        else findAndMoveUp(pLevel, pPos, pState, false);
+        else if (findAndMoveUp(pLevel, pPos, pState, true))
+            findAndMoveUp(pLevel, pPos, pState, false);
+
+        // TODO: Add a method that balance all the density to the same value
 
         getMovementHandler(pLevel).tick(pLevel.getLevelData().getDayTime());
     }
@@ -116,7 +129,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
         invalid |= density == MAX_DENSITY;
         invalid |= looped(pLevel, pPos.relative(direction));
         invalid |= density == -1;
-        invalid |= !getGasMap(pLevel).containsKey(pPos.relative(direction)) && direction != Direction.UP;
+        invalid |= !getGasMap(pLevel).containsKey(pPos.relative(direction)) && direction != flowDirection;
 
         currentOnly |= density == MAX_DENSITY;
         fixableWithFindingAgain |= looped(pLevel, pPos);
@@ -138,9 +151,9 @@ public abstract class FlowingGas extends BehaviorableFluid {
     }
 
     private static final List<BlockPos> loopCheck = new ArrayList<>();
-    protected static boolean looped(LevelAccessor pLevel, BlockPos pPos) {
+    protected boolean looped(LevelAccessor pLevel, BlockPos pPos) {
         Direction gasMovement = getGasMap(pLevel).get(pPos);
-        if (loopCheck.contains(pPos) || gasMovement == null || gasMovement == Direction.UP) {
+        if (loopCheck.contains(pPos) || gasMovement == null || gasMovement == flowDirection) {
             boolean contains = loopCheck.contains(pPos);
             loopCheck.clear();
             return contains;
@@ -212,18 +225,20 @@ public abstract class FlowingGas extends BehaviorableFluid {
     }
 
     protected boolean spreadVertically(LevelAccessor pLevel, BlockPos pPos, FluidState pState, boolean simulate) {
-        if (!canSpreadTo(pLevel, pPos.above())) return false;
-        if (pState.getValue(FlowingGas.DENSITY) > MAX_DENSITY - getMovementHandler(pLevel).getDensity(pPos.above())) return false;
+        if (!canSpreadTo(pLevel, pPos.relative(flowDirection))) return false;
+        if (pState.getValue(FlowingGas.DENSITY) > MAX_DENSITY - getMovementHandler(pLevel).getDensity(pPos.relative(flowDirection))) return false;
 
         if (simulate) return true;
 
-        if (!pLevel.getBlockState(pPos.above()).isAir())
-            beforeDestroyingBlock(pLevel, pPos.above(), pLevel.getBlockState(pPos.above()));
+        if (!pLevel.getBlockState(pPos.relative(flowDirection)).isAir())
+            beforeDestroyingBlock(pLevel, pPos.relative(flowDirection), pLevel.getBlockState(pPos.relative(flowDirection)));
 
-        getMovementHandler(pLevel).rise(pPos, Math.min(pState.getValue(FlowingGas.DENSITY), MAX_DENSITY - getMovementHandler(pLevel).getDensity(pPos.above())));
-        getGraph(pLevel).addVertex(pPos);
-        getGraph(pLevel).addVertex(pPos.above());
-        getGraph(pLevel).addEdge(pPos, pPos.above());
+        getMovementHandler(pLevel).move(pPos, Math.min(pState.getValue(FlowingGas.DENSITY), MAX_DENSITY - getMovementHandler(pLevel).getDensity(pPos.relative(flowDirection))), flowDirection);
+        for (BlockPos pos : new BlockPos[] {pPos, pPos.relative(flowDirection)})
+            if (!getGraph(pLevel).containsVertex(pos))
+                getGraph(pLevel).addVertex(pos);
+        if (!getGraph(pLevel).containsEdge(pPos, pPos.relative(flowDirection)))
+            getGraph(pLevel).addEdge(pPos, pPos.relative(flowDirection));
 
         return true;
     }
@@ -261,6 +276,8 @@ public abstract class FlowingGas extends BehaviorableFluid {
         int each, remainder;
         each = totalDensity / space;
         remainder = totalDensity % space;
+
+        if (each == 0) return false;
 
         addedAmountMap.forEach((direction, amount) ->
                 addedAmountMap.put(direction, each - getMovementHandler(pLevel).getDensity(pPos.relative(direction)))
@@ -342,12 +359,12 @@ public abstract class FlowingGas extends BehaviorableFluid {
         render(p_76116_, pPos, gas, 3, 160);
     }
 
-    public static void render(BlockAndTintGetter pLevel, BlockPos pPos, FlowingGas gas, int amount, int time) {
+    public void render(BlockAndTintGetter pLevel, BlockPos pPos, FlowingGas gas, int amount, int time) {
         ArrayList<Triple<Double, Double, Double>> particleDirections = new ArrayList<>();
 
         particleDirections.add(Triple.of(0D, 0D, 0D));
 
-        if (canSpreadTo(pLevel, pPos, gas, Direction.UP))
+        if (canSpreadTo(pLevel, pPos, gas, flowDirection))
             particleDirections.add(Triple.of(0D, 1/16D, 0D));
         else
             for (Direction dir : Direction.Plane.HORIZONTAL)
@@ -371,6 +388,74 @@ public abstract class FlowingGas extends BehaviorableFluid {
         if (state.getFluidState().is(gas.getSource())) return true;
         if (state.getFluidState().is(gas.getFlowing())) return true;
         return state.canBeReplaced(gas);
+    }
+
+    @Override
+    public @NotNull VoxelShape getShape(FluidState p_76084_, BlockGetter p_76085_, BlockPos p_76086_) {
+        return Shapes.block();
+    }
+
+    public static class Properties extends ForgeFlowingFluid.Properties {
+        public Properties(Supplier<? extends Fluid> still, Supplier<? extends Fluid> flowing, FluidAttributes.Builder attributes) {
+            super(still, flowing, attributes);
+        }
+
+        protected GasFlowDirection gasFlowDirection = GasFlowDirection.UP;
+
+        public Properties gasFlowDirection(GasFlowDirection direction)
+        {
+            gasFlowDirection = direction;
+            return this;
+        }
+
+        public enum GasFlowDirection {
+            UP(Direction.UP), DOWN(Direction.DOWN);
+
+            private final Direction direction;
+
+            GasFlowDirection(Direction direction) {
+                if (direction.getStepY() == 0) throw new IllegalStateException("Gas flow direction must be vertical");
+
+                this.direction = direction;
+            }
+        }
+
+        // Casts to our own Properties
+
+        public Properties canMultiply()
+        {
+            return (Properties) super.canMultiply();
+        }
+
+        public Properties bucket(Supplier<? extends Item> bucket)
+        {
+            return (Properties) super.bucket(bucket);
+        }
+
+        public Properties block(Supplier<? extends LiquidBlock> block)
+        {
+            return (Properties) super.block(block);
+        }
+
+        public Properties slopeFindDistance(int slopeFindDistance)
+        {
+            throw new UnsupportedOperationException("Gas fluids cannot have a slope find distance property");
+        }
+
+        public Properties levelDecreasePerBlock(int levelDecreasePerBlock)
+        {
+            throw new UnsupportedOperationException("Gas fluids cannot have a level decrease per block property");
+        }
+
+        public Properties explosionResistance(float explosionResistance)
+        {
+            return (Properties) super.explosionResistance(explosionResistance);
+        }
+
+        public Properties tickRate(int tickRate)
+        {
+            return (Properties) super.tickRate(tickRate);
+        }
     }
 
     public static class Flowing extends FlowingGas {
@@ -400,8 +485,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
         List<FluidBehavior> behaviors = new ArrayList<>();
 
         // Temporary STARTS
-        behaviors.add(new SpongingFluidBehaviorImpl(true));
-        behaviors.add(new FarmLandHydrationFluidBehaviorImpl(true));
+        behaviors.add(new HydrateBehavior(true));
         // Temporary ENDS
 
         behaviors.add(new FluidBehavior() {
