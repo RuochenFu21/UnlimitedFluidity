@@ -247,20 +247,49 @@ public abstract class FlowingGas extends BehaviorableFluid {
         Graph<BlockPos, DefaultEdge> graph = getGraph(pLevel);
         int totalDensity = getMovementHandler(pLevel).getDensity(pPos);
         int space = 1;
-        Map<Direction, Integer> addedAmountMap = new HashMap<>();
+        HashMap<BlockPos, Integer> addedAmountMap = new HashMap<>();
 
         for (Direction direction : Direction.Plane.HORIZONTAL)
             if (canSpreadTo(pLevel, pPos.relative(direction))) {
-                space++;
-                totalDensity += getMovementHandler(pLevel).getDensity(pPos.relative(direction));
-                addedAmountMap.put(direction, 0);
+                BlockPos newPos = pPos.relative(direction);
 
-                for (BlockPos pos : new BlockPos[] {pPos, pPos.relative(direction)})
+                space++;
+                totalDensity += getMovementHandler(pLevel).getDensity(newPos);
+                addedAmountMap.put(newPos, 0);
+
+                for (BlockPos pos : new BlockPos[] {pPos, newPos})
                     if (!graph.containsVertex(pos))
                         graph.addVertex(pos);
 
-                if (!graph.containsEdge(pPos, pPos.relative(direction)))
-                    graph.addEdge(pPos, pPos.relative(direction));
+                if (!graph.containsEdge(pPos, newPos))
+                    graph.addEdge(pPos, newPos);
+
+                for (Direction direction2 : Direction.Plane.HORIZONTAL){
+                    if (newPos.relative(direction2).equals(pPos))
+                        continue;
+                    if (addedAmountMap.containsKey(newPos.relative(direction2)))
+                        continue;
+                    if (canSpreadTo(pLevel, newPos.relative(direction2))) {
+                        space++;
+                        totalDensity += getMovementHandler(pLevel).getDensity(newPos.relative(direction2));
+                        addedAmountMap.put(newPos.relative(direction2), 0);
+
+                        for (BlockPos pos : new BlockPos[] {newPos, newPos.relative(direction2)})
+                            if (!graph.containsVertex(pos))
+                                graph.addVertex(pos);
+
+                        if (!graph.containsEdge(newPos, newPos.relative(direction2)))
+                            graph.addEdge(newPos, newPos.relative(direction2));
+                    } else {
+                        if (graph.containsEdge(newPos, newPos.relative(direction2)))
+                            graph.removeEdge(newPos, newPos.relative(direction2));
+
+                        for (BlockPos pos : new BlockPos[] {newPos, newPos.relative(direction2)})
+                            if (graph.containsVertex(pos) && graph.edgesOf(pos).isEmpty())
+                                graph.removeVertex(pos);
+
+                    }
+                }
             } else {
                 if (graph.containsEdge(pPos, pPos.relative(direction)))
                     graph.removeEdge(pPos, pPos.relative(direction));
@@ -279,21 +308,25 @@ public abstract class FlowingGas extends BehaviorableFluid {
 
         if (each == 0) return false;
 
-        addedAmountMap.forEach((direction, amount) ->
-                addedAmountMap.put(direction, each - getMovementHandler(pLevel).getDensity(pPos.relative(direction)))
+        addedAmountMap.forEach((pos, amount) ->
+                addedAmountMap.put(pos, each - getMovementHandler(pLevel).getDensity(pos))
         );
 
         if (remainder != 0) {
-            Set<Direction> remainderDirections = addedAmountMap.keySet();
+            @SuppressWarnings("unchecked")
+            Map<BlockPos, Integer> copiedMap = ((HashMap<BlockPos, Integer>) addedAmountMap.clone());
+
+            Set<BlockPos> remainderDirections = copiedMap.keySet();
+
             while (true) {
-                Optional<Integer> optionalMin = addedAmountMap.values().stream().min(Integer::compareTo);
+                Optional<Integer> optionalMin = copiedMap.values().stream().min(Integer::compareTo);
 
                 if (optionalMin.isEmpty()) return false;
 
                 Integer min = optionalMin.get();
 
                 //noinspection OptionalGetWithoutIsPresent
-                remainderDirections.remove(addedAmountMap.entrySet().stream().filter(entry -> entry.getValue().equals(min)).findFirst().get().getKey());
+                remainderDirections.remove(copiedMap.entrySet().stream().filter(entry -> entry.getValue().equals(min)).findFirst().get().getKey());
 
                 if (remainderDirections.isEmpty()) return false;
 
@@ -314,12 +347,14 @@ public abstract class FlowingGas extends BehaviorableFluid {
 
         if (simulated) return true;
 
-        for (Map.Entry<Direction, Integer> entry : addedAmountMap.entrySet()) {
-            BlockPos pos = pPos.relative(entry.getKey());
+        for (Map.Entry<BlockPos, Integer> entry : addedAmountMap.entrySet()) {
+            BlockPos pos = entry.getKey();
             if (!pLevel.getBlockState(pos).isAir())
                 beforeDestroyingBlock(pLevel, pos, pLevel.getBlockState(pos));
 
-            getMovementHandler(pLevel).move(pPos, entry.getValue(), entry.getKey());
+            getMovementHandler(pLevel).operations.add(GasMovementHandler.GasMovement.create()
+                    .decrease(pPos, entry.getValue())
+                    .increase(entry.getKey(), entry.getValue()));
         }
 
         return true;

@@ -42,9 +42,9 @@ public class FluidityDebugRegistry {
             () -> DEBUG_FLUID.get(),
             () -> DEBUG_FLUID_FLOWING.get(),
             FluidAttributes.builder(WATER_STILL_RL, WATER_FLOWING_RL)
-                    .density(15).luminosity(2).viscosity(5).overlay(WATER_OVERLAY_RL)
+                    .density(15).luminosity(2).viscosity(50000).overlay(WATER_OVERLAY_RL)
                     .color(0xbffcba03)).tickRate(2)
-            .block(() -> FluidityDebugRegistry.DEBUG_FLUID_BLOCK.get()).bucket(() -> FluidityDebugRegistry.DEBUG_FLUID_BUCKET.get()).gasFlowDirection(GasFlowDirection.UP);
+            .block(() -> FluidityDebugRegistry.DEBUG_FLUID_BLOCK.get()).bucket(() -> FluidityDebugRegistry.DEBUG_FLUID_BUCKET.get()).gasFlowDirection(GasFlowDirection.DOWN);
 
     public static RegistryObject<LiquidBlock> DEBUG_FLUID_BLOCK = FluidityDebugRegistry.BLOCKS.register("debug_fluid_block",
             () -> new GasBlock(() -> FluidityDebugRegistry.DEBUG_FLUID.get(), BlockBehaviour.Properties.of(Material.WATER)

@@ -82,7 +82,7 @@ public class GasMovementHandler {
                 .increase(pos.relative(direction), density));
     }
 
-    private static class GasMovement {
+    public static class GasMovement {
         protected ArrayList<Pair<BlockPos, Integer>> movements = new ArrayList<>();
 
         public static GasMovement create() {
