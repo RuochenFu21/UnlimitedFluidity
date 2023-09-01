@@ -1,4 +1,6 @@
 package com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.farmhydration;
 
-public record FarmHydrationFluidBehaviorImpl(boolean canHydrateFarm) implements IFarmHydrationFluidBehavior {
-}
+import com.forsteri.unlimitedfluidity.util.Api;
+
+@Api
+public record FarmHydrationFluidBehaviorImpl(boolean canHydrateFarm) implements IFarmHydrationFluidBehavior { }

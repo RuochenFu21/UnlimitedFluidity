@@ -18,17 +18,17 @@ import java.util.Map;
 public class GasMovementHandler {
     public static final Map<Pair<LevelAccessor, FlowingGas>, GasMovementHandler> handlers = new HashMap<>();
 
-    private final LevelAccessor level;
-    private final FlowingGas source;
+    protected final LevelAccessor level;
+    protected final FlowingGas source;
 
-    public AbstractBaseGraph<BlockPos, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+    private AbstractBaseGraph<BlockPos, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
 
-    public GasMovementHandler(LevelAccessor level, FlowingGas source) {
+    private GasMovementHandler(LevelAccessor level, FlowingGas source) {
         this.level = level;
         this.source = source;
     }
 
-    public GasMovementHandler(Pair<LevelAccessor, FlowingGas> pair) {
+    private GasMovementHandler(Pair<LevelAccessor, FlowingGas> pair) {
         this(pair.getFirst(), pair.getSecond());
     }
 
@@ -80,6 +80,14 @@ public class GasMovementHandler {
         operations.add(GasMovement.create()
                 .decrease(pos, density)
                 .increase(pos.relative(direction), density));
+    }
+
+    public AbstractBaseGraph<BlockPos, DefaultEdge> getGraph() {
+        return graph;
+    }
+
+    public void setGraph(AbstractBaseGraph<BlockPos, DefaultEdge> graph) {
+        this.graph = graph;
     }
 
     public static class GasMovement {

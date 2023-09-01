@@ -12,8 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Supplier;
 
 public class GasBlock extends LiquidBlock {
-    // TODO: Debug GasBlock and change all 8 into FlowingGas.MAX_AMOUNT
-
     public static final IntegerProperty DENSITY = FlowingGas.DENSITY;
 
     public GasBlock(Supplier<? extends FlowingFluid> p_54694_, Properties p_54695_) {

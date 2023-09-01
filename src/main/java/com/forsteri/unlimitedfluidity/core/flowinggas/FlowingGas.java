@@ -3,6 +3,7 @@ package com.forsteri.unlimitedfluidity.core.flowinggas;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableFluid;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.FluidBehavior;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.HydrateBehavior;
+import com.forsteri.unlimitedfluidity.util.Api;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -42,17 +43,20 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @ParametersAreNonnullByDefault
+@Api
 public abstract class FlowingGas extends BehaviorableFluid {
     public static final int MAX_DENSITY = 128;
     public static final IntegerProperty DENSITY = IntegerProperty.create("density", 1, MAX_DENSITY);
     public static final Map<LevelAccessor, Map<BlockPos, Direction>> gasMovementMap = new HashMap<>();
 
     protected final Direction flowDirection;
+    protected final double risePossibility;
 
     protected FlowingGas(Properties properties) {
         super(properties);
 
         this.flowDirection = properties.gasFlowDirection.direction;
+        this.risePossibility = properties.risePossibility;
 
         if (this.isSource(this.defaultFluidState())) {
             this.registerDefaultState(this.getStateDefinition().any()
@@ -80,23 +84,25 @@ public abstract class FlowingGas extends BehaviorableFluid {
     }
 
     public AbstractBaseGraph<BlockPos, DefaultEdge> getGraph(LevelAccessor level) {
-        return getMovementHandler(level).graph;
+        return getMovementHandler(level).getGraph();
     }
 
     @Override
     protected void spread(LevelAccessor pLevel, BlockPos pPos, FluidState pState) {
         if (pState.isEmpty()) return;
 
-        if (spreadVertically(pLevel, pPos, pState, true))
+        boolean rises = Math.random() < risePossibility;
+
+        if (!rises && spreadVertically(pLevel, pPos, pState, true))
             spreadVertically(pLevel, pPos, pState, false);
         else if (moveInPath(pLevel, pPos, pState, true))
             moveInPath(pLevel, pPos, pState, false);
         else if (spreadHorizontally(pLevel, pPos, true))
             spreadHorizontally(pLevel, pPos, false);
+        else if (rises && spreadVertically(pLevel, pPos, pState, true))
+            spreadVertically(pLevel, pPos, pState, false);
         else if (findAndMoveUp(pLevel, pPos, pState, true))
             findAndMoveUp(pLevel, pPos, pState, false);
-
-        // TODO: Add a method that balance all the density to the same value
 
         getMovementHandler(pLevel).tick(pLevel.getLevelData().getDayTime());
     }
@@ -430,6 +436,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
         return Shapes.block();
     }
 
+    @Api
     public static class Properties extends ForgeFlowingFluid.Properties {
         public Properties(Supplier<? extends Fluid> still, Supplier<? extends Fluid> flowing, FluidAttributes.Builder attributes) {
             super(still, flowing, attributes);
@@ -437,9 +444,18 @@ public abstract class FlowingGas extends BehaviorableFluid {
 
         protected GasFlowDirection gasFlowDirection = GasFlowDirection.UP;
 
+        protected double risePossibility = 1f;
+
+        @Api
         public Properties gasFlowDirection(GasFlowDirection direction)
         {
             gasFlowDirection = direction;
+            return this;
+        }
+
+        @Api
+        public Properties risePossibility(double risePossibility) {
+            this.risePossibility = risePossibility;
             return this;
         }
 
@@ -493,6 +509,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
         }
     }
 
+    @Api
     public static class Flowing extends FlowingGas {
         public Flowing(Properties properties) {
             super(properties);
@@ -504,6 +521,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
         }
     }
 
+    @Api
     public static class Source extends FlowingGas {
         public Source(Properties properties) {
             super(properties);

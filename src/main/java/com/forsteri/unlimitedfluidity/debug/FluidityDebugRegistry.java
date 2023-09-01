@@ -2,7 +2,6 @@ package com.forsteri.unlimitedfluidity.debug;
 
 import com.forsteri.unlimitedfluidity.UnlimitedFluidity;
 import com.forsteri.unlimitedfluidity.core.flowinggas.FlowingGas;
-import com.forsteri.unlimitedfluidity.core.flowinggas.FlowingGas.Properties.GasFlowDirection;
 import com.forsteri.unlimitedfluidity.core.flowinggas.GasBlock;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BucketItem;
@@ -44,7 +43,10 @@ public class FluidityDebugRegistry {
             FluidAttributes.builder(WATER_STILL_RL, WATER_FLOWING_RL)
                     .density(15).luminosity(2).viscosity(50000).overlay(WATER_OVERLAY_RL)
                     .color(0xbffcba03)).tickRate(2)
-            .block(() -> FluidityDebugRegistry.DEBUG_FLUID_BLOCK.get()).bucket(() -> FluidityDebugRegistry.DEBUG_FLUID_BUCKET.get()).gasFlowDirection(GasFlowDirection.DOWN);
+            .block(() -> FluidityDebugRegistry.DEBUG_FLUID_BLOCK.get())
+            .bucket(() -> FluidityDebugRegistry.DEBUG_FLUID_BUCKET.get())
+//            .gasFlowDirection(GasFlowDirection.DOWN)
+            .risePossibility(0.1);
 
     public static RegistryObject<LiquidBlock> DEBUG_FLUID_BLOCK = FluidityDebugRegistry.BLOCKS.register("debug_fluid_block",
             () -> new GasBlock(() -> FluidityDebugRegistry.DEBUG_FLUID.get(), BlockBehaviour.Properties.of(Material.WATER)
