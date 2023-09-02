@@ -1,5 +1,6 @@
 package com.forsteri.unlimitedfluidity.core.flowinggas;
 
+import com.forsteri.unlimitedfluidity.util.Api;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -11,6 +12,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
+/**
+ * <p>Gas block</p>
+ * @since       1.0
+ */
+@Api
 public class GasBlock extends LiquidBlock {
     public static final IntegerProperty DENSITY = FlowingGas.DENSITY;
 

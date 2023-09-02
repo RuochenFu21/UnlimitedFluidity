@@ -3,15 +3,15 @@ package com.forsteri.unlimitedfluidity.core.fluidbehaviors.swimming;
 import com.forsteri.unlimitedfluidity.util.Api;
 
 /**
- * @since       1.1
- * For Custom fluid that allows/disallows player to swim in it
+ * <p>Default fluid behavior implementation for allowing/disallowing player to swim in the fluid</p>
+ * @since       2.0
  * @param canSwim whether the player can swim in this fluid
  */
 @Api
 public record SwimmingFluidBehaviorImpl(boolean canSwim) implements ISwimmingFluidBehavior {
     /**
-     * @since       1.1
-     * For Custom fluid that allows player to swim in it
+     * <p>Fluid behavior implementation disallowing player to swim in the fluid</p>
+     * @since       2.0
      */
     @Api
     public SwimmingFluidBehaviorImpl() {

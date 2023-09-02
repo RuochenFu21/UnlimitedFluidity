@@ -42,6 +42,10 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * <p>Flowing gas</p>
+ * @since       1.0
+ */
 @ParametersAreNonnullByDefault
 @Api
 public abstract class FlowingGas extends BehaviorableFluid {
@@ -436,6 +440,10 @@ public abstract class FlowingGas extends BehaviorableFluid {
         return Shapes.block();
     }
 
+    /**
+     * <p>Gas properties</p>
+     * @since       1.0
+     */
     @Api
     public static class Properties extends ForgeFlowingFluid.Properties {
         public Properties(Supplier<? extends Fluid> still, Supplier<? extends Fluid> flowing, FluidAttributes.Builder attributes) {
@@ -446,6 +454,10 @@ public abstract class FlowingGas extends BehaviorableFluid {
 
         protected double risePossibility = 1f;
 
+        /**
+         * <p>Gas flow direction</p>
+         * @since       1.0
+         */
         @Api
         public Properties gasFlowDirection(GasFlowDirection direction)
         {
@@ -453,6 +465,10 @@ public abstract class FlowingGas extends BehaviorableFluid {
             return this;
         }
 
+        /**
+         * <p>Properties for a gas to rise instead of spread vertical</p>
+         * @since       1.0
+         */
         @Api
         public Properties risePossibility(double risePossibility) {
             this.risePossibility = risePossibility;
@@ -509,6 +525,10 @@ public abstract class FlowingGas extends BehaviorableFluid {
         }
     }
 
+    /**
+     * <p>Default flowing gas implementation</p>
+     * @since       1.0
+     */
     @Api
     public static class Flowing extends FlowingGas {
         public Flowing(Properties properties) {
@@ -521,6 +541,10 @@ public abstract class FlowingGas extends BehaviorableFluid {
         }
     }
 
+    /**
+     * <p>Default gas source implementation</p>
+     * @since       1.0
+     */
     @Api
     public static class Source extends FlowingGas {
         public Source(Properties properties) {

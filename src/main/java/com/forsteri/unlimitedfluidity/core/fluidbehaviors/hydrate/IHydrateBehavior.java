@@ -1,12 +1,22 @@
 package com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate;
 
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.IAgriculturalHydrationFluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.farmlandhydration.IFarmlandHydrationFluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.sugarcanehydration.ISugarCaneHydrationFluidBehavior;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.concretehydration.IConcreteHydrationFluidBehavior;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.farmhydration.IFarmHydrationFluidBehavior;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging.ISpongingFluidBehavior;
+import com.forsteri.unlimitedfluidity.util.Api;
 
-public interface IHydrateBehavior extends IConcreteHydrationFluidBehavior, IFarmHydrationFluidBehavior, ISpongingFluidBehavior {
+/**
+ * <p>Api for creating fluid behavior allowing/disallowing hydration</p>
+ * <p>This is a interface for {@link HydrateBehavior} for allowance of further extending</p>
+ * <p>This has the behavior of {@link IAgriculturalHydrationFluidBehavior}({@link IFarmlandHydrationFluidBehavior} & {@link ISugarCaneHydrationFluidBehavior}) & {@link IAgriculturalHydrationFluidBehavior} & {@link ISpongingFluidBehavior}</p>
+ * @since       2.0
+ */
+@Api
+public interface IHydrateBehavior extends IConcreteHydrationFluidBehavior, IAgriculturalHydrationFluidBehavior, ISpongingFluidBehavior {
     @Override
-    default boolean canHydrateFarm() {
+    default boolean canAgriculturalHydrate() {
         return canHydrate();
     }
 
@@ -20,5 +30,10 @@ public interface IHydrateBehavior extends IConcreteHydrationFluidBehavior, IFarm
         return canHydrate();
     }
 
+    /**
+     * @return      whether the implementation allows hydration
+     * @since       2.0
+     */
+    @Api
     boolean canHydrate();
 }

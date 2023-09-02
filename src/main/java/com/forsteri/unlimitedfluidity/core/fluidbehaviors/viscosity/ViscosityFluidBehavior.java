@@ -3,9 +3,9 @@ package com.forsteri.unlimitedfluidity.core.fluidbehaviors.viscosity;
 import com.forsteri.unlimitedfluidity.util.Api;
 
 /**
- * @since       1.1
- * For Custom fluid that have entity movement viscosity.
- * @param viscosity how much slower the entity move in this fluid compare to water.
+ * <p>Default fluid behavior implementation for entity movement resistance</p>
+ * @since       2.0
+ * @param viscosity whether the player can swim in this fluid
  */
 @Api
 public record ViscosityFluidBehavior(int viscosity) implements IViscosityFluidBehavior {}
