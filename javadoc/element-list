@@ -9,6 +9,7 @@ com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration
 com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.sugarcanehydration
 com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.concretehydration
 com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging
+com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch
 com.forsteri.unlimitedfluidity.core.fluidbehaviors.swimming
 com.forsteri.unlimitedfluidity.core.fluidbehaviors.viscosity
 com.forsteri.unlimitedfluidity.debug

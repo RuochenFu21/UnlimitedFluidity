@@ -61,6 +61,7 @@ loadScripts(document, 'script');</script>
 <li><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/hydrate/agriculturalhydration/sugarcanehydration/package-tree.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.sugarcanehydration</a>, </li>
 <li><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/hydrate/concretehydration/package-tree.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.concretehydration</a>, </li>
 <li><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/hydrate/sponging/package-tree.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging</a>, </li>
+<li><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/package-tree.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch</a>, </li>
 <li><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/swimming/package-tree.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.swimming</a>, </li>
 <li><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/viscosity/package-tree.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.viscosity</a>, </li>
 <li><a href="com/forsteri/unlimitedfluidity/debug/package-tree.html">com.forsteri.unlimitedfluidity.debug</a>, </li>
@@ -76,9 +77,10 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">net.minecraftforge.common.capabilities.CapabilityProvider&lt;B&gt; (implements net.minecraftforge.common.capabilities.ICapabilityProviderImpl&lt;B&gt;)
 <ul>
-<li class="circle">com.forsteri.unlimitedfluidity.mixin.behavioreffect.<a href="com/forsteri/unlimitedfluidity/mixin/behavioreffect/MixinEntityMovement.html" class="type-name-link" title="class in com.forsteri.unlimitedfluidity.mixin.behavioreffect">MixinEntityMovement</a> (implements net.minecraft.commands.CommandSource, net.minecraft.world.level.entity.EntityAccess, net.minecraftforge.common.extensions.IForgeEntity, net.minecraft.world.Nameable)</li>
+<li class="circle">com.forsteri.unlimitedfluidity.mixin.behavioreffect.<a href="com/forsteri/unlimitedfluidity/mixin/behavioreffect/MixinEntity.html" class="type-name-link" title="class in com.forsteri.unlimitedfluidity.mixin.behavioreffect">MixinEntity</a> (implements net.minecraft.commands.CommandSource, net.minecraft.world.level.entity.EntityAccess, net.minecraftforge.common.extensions.IForgeEntity, net.minecraft.world.Nameable)</li>
 </ul>
 </li>
+<li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/FluidEntityInteractionHandler.html" class="type-name-link" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">FluidEntityInteractionHandler</a></li>
 <li class="circle">com.forsteri.unlimitedfluidity.debug.<a href="com/forsteri/unlimitedfluidity/debug/FluidityDebugRegistry.html" class="type-name-link" title="class in com.forsteri.unlimitedfluidity.debug">FluidityDebugRegistry</a></li>
 <li class="circle">net.minecraftforge.fluids.ForgeFlowingFluid.Properties
 <ul>
@@ -93,6 +95,7 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">net.minecraft.world.level.block.LiquidBlock (implements net.minecraft.world.level.block.BucketPickup)
 <ul>
+<li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/BehaviorableLiquidBlock.html" class="type-name-link" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors">BehaviorableLiquidBlock</a> (implements com.forsteri.unlimitedfluidity.core.fluidbehaviors.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/IBehaviorable.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IBehaviorable</a>)</li>
 <li class="circle">com.forsteri.unlimitedfluidity.core.flowinggas.<a href="com/forsteri/unlimitedfluidity/core/flowinggas/GasBlock.html" class="type-name-link" title="class in com.forsteri.unlimitedfluidity.core.flowinggas">GasBlock</a></li>
 </ul>
 </li>
@@ -108,7 +111,7 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">com.forsteri.unlimitedfluidity.core.<a href="com/forsteri/unlimitedfluidity/core/SmartFluid.html" class="type-name-link" title="class in com.forsteri.unlimitedfluidity.core">SmartFluid</a>
 <ul>
-<li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/BehaviorableFluid.html" class="type-name-link" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors">BehaviorableFluid</a>
+<li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/BehaviorableFluid.html" class="type-name-link" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors">BehaviorableFluid</a> (implements com.forsteri.unlimitedfluidity.core.fluidbehaviors.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/IBehaviorable.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IBehaviorable</a>)
 <ul>
 <li class="circle">com.forsteri.unlimitedfluidity.core.flowinggas.<a href="com/forsteri/unlimitedfluidity/core/flowinggas/FlowingGas.html" class="type-name-link" title="class in com.forsteri.unlimitedfluidity.core.flowinggas">FlowingGas</a>
 <ul>
@@ -156,7 +159,8 @@ loadScripts(document, 'script');</script>
 <section class="hierarchy">
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
-<li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/FluidBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">FluidBehavior</a>
+<li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/IBehaviorable.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IBehaviorable</a></li>
+<li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/IFluidBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IFluidBehavior</a>
 <ul>
 <li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.concretehydration.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/hydrate/concretehydration/IConcreteHydrationFluidBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.concretehydration">IConcreteHydrationFluidBehavior</a>
 <ul>
@@ -170,6 +174,11 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/hydrate/IHydrateBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate">IHydrateBehavior</a> (also extends com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.concretehydration.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/hydrate/concretehydration/IConcreteHydrationFluidBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.concretehydration">IConcreteHydrationFluidBehavior</a>, com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/hydrate/sponging/ISpongingFluidBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging">ISpongingFluidBehavior</a>)</li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionBehavior</a>&lt;T&gt; (also extends com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a>&lt;T&gt;)
+<ul>
+<li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlockBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWIthNeighborBlockBehavior</a>&lt;T&gt; (also extends com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlock.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWIthNeighborBlock</a>&lt;T&gt;)</li>
 </ul>
 </li>
 <li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/hydrate/sponging/ISpongingFluidBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging">ISpongingFluidBehavior</a>
@@ -188,6 +197,20 @@ loadScripts(document, 'script');</script>
 </li>
 <li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.swimming.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/swimming/ISwimmingFluidBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.swimming">ISwimmingFluidBehavior</a></li>
 <li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.viscosity.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/viscosity/IViscosityFluidBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.viscosity">IViscosityFluidBehavior</a></li>
+</ul>
+</li>
+<li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a>&lt;T&gt;
+<ul>
+<li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionBehavior</a>&lt;T&gt; (also extends com.forsteri.unlimitedfluidity.core.fluidbehaviors.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/IFluidBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IFluidBehavior</a>)
+<ul>
+<li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlockBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWIthNeighborBlockBehavior</a>&lt;T&gt; (also extends com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlock.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWIthNeighborBlock</a>&lt;T&gt;)</li>
+</ul>
+</li>
+<li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlock.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWIthNeighborBlock</a>&lt;T&gt;
+<ul>
+<li class="circle">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlockBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWIthNeighborBlockBehavior</a>&lt;T&gt; (also extends com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionBehavior</a>&lt;T&gt;)</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
