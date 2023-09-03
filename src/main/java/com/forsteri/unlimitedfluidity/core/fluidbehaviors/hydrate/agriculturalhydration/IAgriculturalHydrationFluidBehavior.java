@@ -7,7 +7,7 @@ import com.forsteri.unlimitedfluidity.util.Api;
 /**
  * <p>Api for creating fluid behavior allowing/disallowing agricultural hydration</p>
  * <p>This is a interface for {@link AgriculturalHydrationFluidBehaviorImpl} for allowance of further extending</p>
- * <p>This has the behavior of {@link IFarmlandHydrationFluidBehavior} & {@link ISugarCaneHydrationFluidBehavior}</p>
+ * <p>This has the behavior of {@link IFarmlandHydrationFluidBehavior} &amp {@link ISugarCaneHydrationFluidBehavior}</p>
  * @since       2.0
  */
 @Api
