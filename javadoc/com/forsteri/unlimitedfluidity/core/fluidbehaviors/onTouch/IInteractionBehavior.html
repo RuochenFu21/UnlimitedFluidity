@@ -72,16 +72,25 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>T</code> - The type of the return value of the interaction, just a bit of customization</dd>
+</dl>
+<dl class="notes">
 <dt>All Superinterfaces:</dt>
 <dd><code><a href="../IFluidBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IFluidBehavior</a></code>, <code><a href="IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a>&lt;T&gt;</code></dd>
 </dl>
 <dl class="notes">
 <dt>All Known Subinterfaces:</dt>
-<dd><code><a href="IInteractionWIthNeighborBlockBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWIthNeighborBlockBehavior</a>&lt;T&gt;</code></dd>
+<dd><code><a href="IInteractionWithNeighborBlockUpdateBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdateBehavior</a>&lt;T&gt;</code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">IInteractionBehavior&lt;T&gt;</span><span class="extends-implements">
 extends <a href="IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a>&lt;T&gt;, <a href="../IFluidBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IFluidBehavior</a></span></div>
+<div class="block"><p>This interface is where you actually implement the behavior of the fluid.</p></div>
+<dl class="notes">
+<dt>Since:</dt>
+<dd>2.0</dd>
+</dl>
 </section>
 <section class="summary">
 <ul class="summary-list">

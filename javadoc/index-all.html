@@ -86,7 +86,9 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/BehaviorableFluid.html#%3Cinit%3E(net.minecraftforge.fluids.ForgeFlowingFluid.Properties)" class="member-name-link">BehaviorableFluid(ForgeFlowingFluid.Properties)</a> - Constructor for class com.forsteri.unlimitedfluidity.core.fluidbehaviors.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/BehaviorableFluid.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors">BehaviorableFluid</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/BehaviorableLiquidBlock.html" class="type-name-link" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors">BehaviorableLiquidBlock</a> - Class in <a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/package-summary.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Some fluid behavior might require the liquid block to be behaviorable</div>
+</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/BehaviorableLiquidBlock.html#%3Cinit%3E(java.util.function.Supplier,net.minecraft.world.level.block.state.BlockBehaviour.Properties)" class="member-name-link">BehaviorableLiquidBlock(Supplier&lt;? extends FlowingFluid&gt;, BlockBehaviour.Properties)</a> - Constructor for class com.forsteri.unlimitedfluidity.core.fluidbehaviors.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/BehaviorableLiquidBlock.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors">BehaviorableLiquidBlock</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/flowinggas/FlowingGas.Properties.html#block(java.util.function.Supplier)" class="member-name-link">block(Supplier&lt;? extends LiquidBlock&gt;)</a> - Method in class com.forsteri.unlimitedfluidity.core.flowinggas.<a href="com/forsteri/unlimitedfluidity/core/flowinggas/FlowingGas.Properties.html" title="class in com.forsteri.unlimitedfluidity.core.flowinggas">FlowingGas.Properties</a></dt>
@@ -459,27 +461,47 @@ loadScripts(document, 'script');</script>
 <div class="block">Api for creating fluid behavior allowing/disallowing hydration</div>
 </dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a>&lt;<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html" title="type parameter in IInteraction">T</a>&gt; - Interface in <a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/package-summary.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Api for creating behavior interface that have interactions between entity, block, fluid, or item</div>
+</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionBehavior</a>&lt;<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionBehavior.html" title="type parameter in IInteractionBehavior">T</a>&gt; - Interface in <a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/package-summary.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlock.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWIthNeighborBlock</a>&lt;<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlock.html" title="type parameter in IInteractionWIthNeighborBlock">T</a>&gt; - Interface in <a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/package-summary.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlockBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWIthNeighborBlockBehavior</a>&lt;<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlockBehavior.html" title="type parameter in IInteractionWIthNeighborBlockBehavior">T</a>&gt; - Interface in <a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/package-summary.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">This interface is where you actually implement the behavior of the fluid.</div>
+</dd>
+<dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWithNeighborBlockUpdate.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdate</a>&lt;<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWithNeighborBlockUpdate.html" title="type parameter in IInteractionWithNeighborBlockUpdate">T</a>&gt; - Interface in <a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/package-summary.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch</a></dt>
+<dd>
+<div class="block"><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch"><code>IInteraction</code></a> but with neighbor block update</div>
+</dd>
+<dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWithNeighborBlockUpdateBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdateBehavior</a>&lt;<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWithNeighborBlockUpdateBehavior.html" title="type parameter in IInteractionWithNeighborBlockUpdateBehavior">T</a>&gt; - Interface in <a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/package-summary.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch</a></dt>
+<dd>
+<div class="block">This interface is where you actually implement the behavior of the fluid.</div>
+</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/flowinggas/GasMovementHandler.GasMovement.html#increase(net.minecraft.core.BlockPos,int)" class="member-name-link">increase(BlockPos, int)</a> - Method in class com.forsteri.unlimitedfluidity.core.flowinggas.<a href="com/forsteri/unlimitedfluidity/core/flowinggas/GasMovementHandler.GasMovement.html" title="class in com.forsteri.unlimitedfluidity.core.flowinggas">GasMovementHandler.GasMovement</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html#interactWithBlock(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)" class="member-name-link">interactWithBlock(LevelReader, BlockPos, BlockState)</a> - Method in interface com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Interact with a block</div>
+</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html#interactWithBlockDestroyed(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)" class="member-name-link">interactWithBlockDestroyed(LevelReader, BlockPos, BlockState)</a> - Method in interface com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Interact with a block *when* the fluid destroyed the block</div>
+</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html#interactWithEntity(net.minecraft.core.BlockPos,net.minecraft.world.entity.Entity)" class="member-name-link">interactWithEntity(BlockPos, Entity)</a> - Method in interface com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Interact with an entity</div>
+</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html#interactWithFluid(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.level.material.Fluid)" class="member-name-link">interactWithFluid(LevelReader, BlockPos, Fluid)</a> - Method in interface com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Interact with a fluid</div>
+</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html#interactWithItem(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.item.ItemStack)" class="member-name-link">interactWithItem(LevelReader, BlockPos, ItemStack)</a> - Method in interface com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlock.html#interactWithNeighborBlock(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.core.BlockPos)" class="member-name-link">interactWithNeighborBlock(LevelReader, BlockPos, BlockPos)</a> - Method in interface com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlock.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWIthNeighborBlock</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Interact with an item</div>
+</dd>
+<dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWithNeighborBlockUpdate.html#interactWithNeighborBlock(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.core.BlockPos)" class="member-name-link">interactWithNeighborBlock(LevelReader, BlockPos, BlockPos)</a> - Method in interface com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWithNeighborBlockUpdate.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdate</a></dt>
+<dd>
+<div class="block">Interact with a block *when* the fluid destroyed the block</div>
+</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/mixin/behavioreffect/MixinEntity.html#isInWater()" class="member-name-link">isInWater()</a> - Method in class com.forsteri.unlimitedfluidity.mixin.behavioreffect.<a href="com/forsteri/unlimitedfluidity/mixin/behavioreffect/MixinEntity.html" title="class in com.forsteri.unlimitedfluidity.mixin.behavioreffect">MixinEntity</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/hydrate/sponging/ISpongingFluidBehavior.html" class="type-name-link" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging">ISpongingFluidBehavior</a> - Interface in <a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/hydrate/sponging/package-summary.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging</a></dt>
@@ -573,7 +595,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/IFluidBehavior.html#onNeighborChange(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.core.BlockPos)" class="member-name-link">onNeighborChange(BlockState, LevelReader, BlockPos, BlockPos)</a> - Method in interface com.forsteri.unlimitedfluidity.core.fluidbehaviors.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/IFluidBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IFluidBehavior</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlockBehavior.html#onNeighborChange(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.core.BlockPos)" class="member-name-link">onNeighborChange(BlockState, LevelReader, BlockPos, BlockPos)</a> - Method in interface com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlockBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWIthNeighborBlockBehavior</a></dt>
+<dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWithNeighborBlockUpdateBehavior.html#onNeighborChange(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.core.BlockPos)" class="member-name-link">onNeighborChange(BlockState, LevelReader, BlockPos, BlockPos)</a> - Method in interface com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWithNeighborBlockUpdateBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdateBehavior</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/flowinggas/GasMovementHandler.html#operations" class="member-name-link">operations</a> - Variable in class com.forsteri.unlimitedfluidity.core.flowinggas.<a href="com/forsteri/unlimitedfluidity/core/flowinggas/GasMovementHandler.html" title="class in com.forsteri.unlimitedfluidity.core.flowinggas">GasMovementHandler</a></dt>
 <dd>&nbsp;</dd>
@@ -599,7 +621,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/IFluidBehavior.html#requireBlockBeBehaviorable()" class="member-name-link">requireBlockBeBehaviorable()</a> - Method in interface com.forsteri.unlimitedfluidity.core.fluidbehaviors.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/IFluidBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IFluidBehavior</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlockBehavior.html#requireBlockBeBehaviorable()" class="member-name-link">requireBlockBeBehaviorable()</a> - Method in interface com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWIthNeighborBlockBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWIthNeighborBlockBehavior</a></dt>
+<dt><a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWithNeighborBlockUpdateBehavior.html#requireBlockBeBehaviorable()" class="member-name-link">requireBlockBeBehaviorable()</a> - Method in interface com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="com/forsteri/unlimitedfluidity/core/fluidbehaviors/onTouch/IInteractionWithNeighborBlockUpdateBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdateBehavior</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/forsteri/unlimitedfluidity/core/flowinggas/FlowingGas.Properties.html#risePossibility" class="member-name-link">risePossibility</a> - Variable in class com.forsteri.unlimitedfluidity.core.flowinggas.<a href="com/forsteri/unlimitedfluidity/core/flowinggas/FlowingGas.Properties.html" title="class in com.forsteri.unlimitedfluidity.core.flowinggas">FlowingGas.Properties</a></dt>
 <dd>&nbsp;</dd>
