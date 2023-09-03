@@ -80,8 +80,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="hydrate/agriculturalhydration/AgriculturalHydrationFluidBehaviorImpl.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration">AgriculturalHydrationFluidBehaviorImpl</a></code>, <code><a href="hydrate/concretehydration/ConcreteHydrationFluidBehaviorImpl.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.concretehydration">ConcreteHydrationFluidBehaviorImpl</a></code>, <code><a href="hydrate/agriculturalhydration/farmlandhydration/FarmlandHydrationFluidBehaviorImpl.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.farmlandhydration">FarmlandHydrationFluidBehaviorImpl</a></code>, <code><a href="hydrate/HydrateBehavior.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate">HydrateBehavior</a></code>, <code><a href="hydrate/sponging/SpongingFluidBehaviorImpl.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging">SpongingFluidBehaviorImpl</a></code>, <code><a href="hydrate/agriculturalhydration/sugarcanehydration/SugarCaneHydrationFluidBehaviorImpl.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.sugarcanehydration">SugarCaneHydrationFluidBehaviorImpl</a></code>, <code><a href="swimming/SwimmingFluidBehaviorImpl.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.swimming">SwimmingFluidBehaviorImpl</a></code>, <code><a href="viscosity/ViscosityFluidBehavior.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.viscosity">ViscosityFluidBehavior</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="annotations"><a href="../../util/Api.html" title="annotation interface in com.forsteri.unlimitedfluidity.util">@Api</a>
-</span><span class="modifiers">public interface </span><span class="element-name type-name-label">FluidBehavior</span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">FluidBehavior</span></div>
 <div class="block"><p>Fluid behavior interface</p></div>
 </section>
 <section class="summary">
@@ -134,8 +133,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tick(net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.level.material.FluidState)">
 <h3>tick</h3>
-<div class="member-signature"><span class="annotations"><a href="../../util/Api.html" title="annotation interface in com.forsteri.unlimitedfluidity.util">@Api</a>
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">tick</span><wbr><span class="parameters">(net.minecraft.world.level.Level&nbsp;p_76113_,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">tick</span><wbr><span class="parameters">(net.minecraft.world.level.Level&nbsp;p_76113_,
  net.minecraft.core.BlockPos&nbsp;p_76114_,
  net.minecraft.world.level.material.FluidState&nbsp;p_76115_)</span></div>
 <div class="block"><p>Called when the fluid ticks</p></div>
@@ -150,8 +148,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beforeDestroyingBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">
 <h3>beforeDestroyingBlock</h3>
-<div class="member-signature"><span class="annotations"><a href="../../util/Api.html" title="annotation interface in com.forsteri.unlimitedfluidity.util">@Api</a>
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">beforeDestroyingBlock</span><wbr><span class="parameters">(net.minecraft.world.level.LevelAccessor&nbsp;worldIn,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">beforeDestroyingBlock</span><wbr><span class="parameters">(net.minecraft.world.level.LevelAccessor&nbsp;worldIn,
  net.minecraft.core.BlockPos&nbsp;pos,
  net.minecraft.world.level.block.state.BlockState&nbsp;state)</span></div>
 <div class="block"><p>Called before the fluid destroying block</p></div>
@@ -166,8 +163,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onEntityInside(net.minecraft.world.level.LevelAccessor,net.minecraft.world.entity.Entity)">
 <h3>onEntityInside</h3>
-<div class="member-signature"><span class="annotations"><a href="../../util/Api.html" title="annotation interface in com.forsteri.unlimitedfluidity.util">@Api</a>
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">onEntityInside</span><wbr><span class="parameters">(net.minecraft.world.level.LevelAccessor&nbsp;worldIn,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">onEntityInside</span><wbr><span class="parameters">(net.minecraft.world.level.LevelAccessor&nbsp;worldIn,
  net.minecraft.world.entity.Entity&nbsp;entity)</span></div>
 <div class="block"><p>Called when there's an entity ticking inside the fluid</p></div>
 <dl class="notes">
