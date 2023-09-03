@@ -1,6 +1,6 @@
 package com.forsteri.unlimitedfluidity.core.fluidbehaviors.viscosity;
 
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.FluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.IFluidBehavior;
 import com.forsteri.unlimitedfluidity.util.Api;
 
 /**
@@ -9,7 +9,7 @@ import com.forsteri.unlimitedfluidity.util.Api;
  * @since       2.0
  */
 @Api
-public interface IViscosityFluidBehavior extends FluidBehavior {
+public interface IViscosityFluidBehavior extends IFluidBehavior {
     /**
      * @return      how much slower the entity move in this fluid compare to water
      * @since       2.0

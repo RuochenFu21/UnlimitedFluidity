@@ -1,6 +1,6 @@
 package com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.sugarcanehydration;
 
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.FluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.IFluidBehavior;
 import com.forsteri.unlimitedfluidity.util.Api;
 
 /**
@@ -9,7 +9,7 @@ import com.forsteri.unlimitedfluidity.util.Api;
  * @since       2.0
  */
 @Api
-public interface ISugarCaneHydrationFluidBehavior extends FluidBehavior {
+public interface ISugarCaneHydrationFluidBehavior extends IFluidBehavior {
     /**
      * @return      whether the implementation allows sugarcane hydration
      * @since       2.0

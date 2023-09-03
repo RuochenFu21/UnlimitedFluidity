@@ -3,7 +3,6 @@ package com.forsteri.unlimitedfluidity.core.fluidbehaviors;
 import com.forsteri.unlimitedfluidity.core.SmartFluid;
 import com.forsteri.unlimitedfluidity.util.Api;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,7 +17,7 @@ import java.util.List;
  * @since       2.0
  * **/
 @Api
-public abstract class BehaviorableFluid extends SmartFluid {
+public abstract class BehaviorableFluid extends SmartFluid implements IBehaviorable {
     protected BehaviorableFluid(Properties properties) {
         super(properties);
     }
@@ -39,21 +38,20 @@ public abstract class BehaviorableFluid extends SmartFluid {
         super.beforeDestroyingBlock(worldIn, pos, state);
     }
 
-    protected void onEntityInside(LevelAccessor worldIn, Entity entity) {
-        getBehaviors().forEach(behavior -> behavior.onEntityInside(worldIn, entity));
-    }
-
     /**
      * @return      Returns the behaviors that this fluid has
      * @since       2.0
      * **/
     @Api
-    protected List<FluidBehavior> getBehaviors() {
+    protected List<IFluidBehavior> getUncheckedBehaviors() {
         return new ArrayList<>();
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends FluidBehavior> T getBehavior(Class<T> behavior) {
-        return (T) getBehaviors().stream().filter(behavior::isInstance).findFirst().orElse(null);
+    public List<IFluidBehavior> getBehaviors() {
+        List<IFluidBehavior> uncheckedBehaviors = getUncheckedBehaviors();
+        if (uncheckedBehaviors.stream().anyMatch(IFluidBehavior::requireBlockBeBehaviorable) && this.createLegacyBlock(this.defaultFluidState()).getBlock() instanceof BehaviorableLiquidBlock)
+            throw new IllegalStateException("Fluid " + this + " has a behavior that requires the block to be a BehaviorableLiquidBlock, but the block is not a BehaviorableLiquidBlock");
+
+        return uncheckedBehaviors;
     }
 }

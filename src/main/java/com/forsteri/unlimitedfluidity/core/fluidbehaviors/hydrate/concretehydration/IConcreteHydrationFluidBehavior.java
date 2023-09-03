@@ -1,6 +1,6 @@
 package com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.concretehydration;
 
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.FluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.IFluidBehavior;
 import com.forsteri.unlimitedfluidity.util.Api;
 
 /**
@@ -9,7 +9,7 @@ import com.forsteri.unlimitedfluidity.util.Api;
  * @since       2.0
  */
 @Api
-public interface IConcreteHydrationFluidBehavior extends FluidBehavior {
+public interface IConcreteHydrationFluidBehavior extends IFluidBehavior {
     /**
      * @return      whether the implementation allows concrete hydration
      * @since       2.0

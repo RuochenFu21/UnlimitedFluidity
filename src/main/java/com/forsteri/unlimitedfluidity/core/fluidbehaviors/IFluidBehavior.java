@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 
@@ -12,7 +13,7 @@ import net.minecraft.world.level.material.FluidState;
  * <p>Fluid behavior interface</p>
  * **/
 @Api
-public interface FluidBehavior {
+public interface IFluidBehavior {
     /**
      * <p>Called when the fluid ticks</p>
      * @since       2.0
@@ -40,6 +41,13 @@ public interface FluidBehavior {
      * @since       2.0
      * **/
     @Api
-    default void onEntityInside(LevelAccessor worldIn, Entity entity) {
+    default void onEntityInside(LevelAccessor worldIn, Entity entity) {}
+
+    default boolean onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
+        return false;
+    }
+
+    default boolean requireBlockBeBehaviorable() {
+        return false;
     }
 }

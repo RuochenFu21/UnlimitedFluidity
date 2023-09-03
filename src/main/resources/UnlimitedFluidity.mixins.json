@@ -7,7 +7,7 @@
   "mixins": [
     "MixinLiquidBlockRenderer",
     "behavioreffect.MixinConcretePowderBlock",
-    "behavioreffect.MixinEntityMovement",
+    "behavioreffect.MixinEntity",
     "behavioreffect.MixinFarmBlock",
     "behavioreffect.MixinSponge",
     "behavioreffect.MixinSugarCaneBlock"

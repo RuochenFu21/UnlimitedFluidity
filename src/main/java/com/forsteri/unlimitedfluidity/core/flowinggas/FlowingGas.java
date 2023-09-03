@@ -1,7 +1,7 @@
 package com.forsteri.unlimitedfluidity.core.flowinggas;
 
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableFluid;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.FluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.IFluidBehavior;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.HydrateBehavior;
 import com.forsteri.unlimitedfluidity.util.Api;
 import com.mojang.datafixers.util.Pair;
@@ -558,14 +558,14 @@ public abstract class FlowingGas extends BehaviorableFluid {
     }
 
     @Override
-    public List<FluidBehavior> getBehaviors() {
-        List<FluidBehavior> behaviors = new ArrayList<>();
+    public List<IFluidBehavior> getBehaviors() {
+        List<IFluidBehavior> behaviors = new ArrayList<>();
 
         // Temporary STARTS
         behaviors.add(new HydrateBehavior(true));
         // Temporary ENDS
 
-        behaviors.add(new FluidBehavior() {
+        behaviors.add(new IFluidBehavior() {
             @Override
             public boolean tick(Level p_76113_, BlockPos p_76114_, FluidState p_76115_) {
                 return true;

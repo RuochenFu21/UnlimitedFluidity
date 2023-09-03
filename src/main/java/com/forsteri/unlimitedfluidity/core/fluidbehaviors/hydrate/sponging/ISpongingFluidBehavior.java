@@ -1,6 +1,6 @@
 package com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging;
 
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.FluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.IFluidBehavior;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.AgriculturalHydrationFluidBehaviorImpl;
 import com.forsteri.unlimitedfluidity.util.Api;
 
@@ -10,7 +10,7 @@ import com.forsteri.unlimitedfluidity.util.Api;
  * @since       2.0
  */
 @Api
-public interface ISpongingFluidBehavior extends FluidBehavior {
+public interface ISpongingFluidBehavior extends IFluidBehavior {
     /**
      * @return      whether the implementation allows fluid sponging
      * @since       2.0
