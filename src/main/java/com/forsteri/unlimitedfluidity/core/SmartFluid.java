@@ -10,9 +10,11 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * <p>Simplifies the process of making fluid</p>
- * <li>Built in the required redundant {@link FlowingFluid#LEVEL} fluid state definition/default value</li>
- * <li>Built in the required redundant {@link Source#getAmount(FluidState)} that always returns 8</li>
- * <li>Built in the required redundant {@link Source#getAmount(FluidState)} that always returns the value of {@link FlowingFluid#LEVEL} property</li>
+ * <ul>
+ *  <li>Built in the required redundant {@link FlowingFluid#LEVEL} fluid state definition/default value</li>
+ *  <li>Built in the required redundant {@link Source#getAmount(FluidState)} that always returns 8</li>
+ *  <li>Built in the required redundant {@link Source#getAmount(FluidState)} that always returns the value of {@link FlowingFluid#LEVEL} property</li>
+ * </ul>
  * @since      1.0
  */
 @Api
