@@ -9,7 +9,7 @@ import com.forsteri.unlimitedfluidity.util.Api;
 
 /**
  * <p>Default fluid behavior implementation for allowing/disallowing hydration</p>
- * <p>This has the behavior of {@link AgriculturalHydrationFluidBehaviorImpl}({@link FarmlandHydrationFluidBehaviorImpl} & {@link SugarCaneHydrationFluidBehaviorImpl}) & {@link ConcreteHydrationFluidBehaviorImpl} & {@link SpongingFluidBehaviorImpl}</p>
+ * <p>This has the behavior of {@link AgriculturalHydrationFluidBehaviorImpl}({@link FarmlandHydrationFluidBehaviorImpl} &amp; {@link SugarCaneHydrationFluidBehaviorImpl}) &amp; {@link ConcreteHydrationFluidBehaviorImpl} &amp; {@link SpongingFluidBehaviorImpl}</p>
  * @since       2.0
  * @param canHydrate whether the fluid can are able to hydrate
  */

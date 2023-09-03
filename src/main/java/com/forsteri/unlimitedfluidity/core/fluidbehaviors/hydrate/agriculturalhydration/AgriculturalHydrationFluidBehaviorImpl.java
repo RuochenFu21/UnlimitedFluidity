@@ -7,7 +7,7 @@ import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhy
 
 /**
  * <p>Default fluid behavior implementation for allowing/disallowing agricultural hydration</p>
- * <p>This has the behavior of {@link FarmlandHydrationFluidBehaviorImpl} & {@link SugarCaneHydrationFluidBehaviorImpl}</p>
+ * <p>This has the behavior of {@link FarmlandHydrationFluidBehaviorImpl} &amp; {@link SugarCaneHydrationFluidBehaviorImpl}</p>
  * @since       2.0
  * @param canAgriculturalHydrate whether the fluid can are able to agricultural hydrate
  */
