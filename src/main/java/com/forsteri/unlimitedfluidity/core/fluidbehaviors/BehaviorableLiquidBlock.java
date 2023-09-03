@@ -9,6 +9,10 @@ import net.minecraft.world.level.material.FlowingFluid;
 import java.util.List;
 import java.util.function.Supplier;
 
+/**
+ * <p>Some fluid behavior might require the liquid block to be behaviorable</p>
+ * @since       2.0
+ */
 public class BehaviorableLiquidBlock extends LiquidBlock implements IBehaviorable {
 
     public BehaviorableLiquidBlock(Supplier<? extends FlowingFluid> p_54694_, Properties p_54695_) {
