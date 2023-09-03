@@ -9,6 +9,10 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 6.5
+          
       - name: Deploy JavaDoc 🚀
         uses: MathieuSoysal/Javadoc-publisher.yml@v2.4.0
         with:
