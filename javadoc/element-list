@@ -1,0 +1,17 @@
+com.forsteri.unlimitedfluidity
+com.forsteri.unlimitedfluidity.core
+com.forsteri.unlimitedfluidity.core.flowinggas
+com.forsteri.unlimitedfluidity.core.flowinggas.command
+com.forsteri.unlimitedfluidity.core.fluidbehaviors
+com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate
+com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration
+com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.farmlandhydration
+com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.sugarcanehydration
+com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.concretehydration
+com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging
+com.forsteri.unlimitedfluidity.core.fluidbehaviors.swimming
+com.forsteri.unlimitedfluidity.core.fluidbehaviors.viscosity
+com.forsteri.unlimitedfluidity.debug
+com.forsteri.unlimitedfluidity.mixin
+com.forsteri.unlimitedfluidity.mixin.behavioreffect
+com.forsteri.unlimitedfluidity.util
