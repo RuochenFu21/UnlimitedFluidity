@@ -2,6 +2,7 @@ package com.forsteri.unlimitedfluidity.core.flowinggas;
 
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableFluid;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.IFluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable.FlammableBehaviorImpl;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.HydrateBehavior;
 import com.forsteri.unlimitedfluidity.util.Api;
 import com.mojang.datafixers.util.Pair;
@@ -240,7 +241,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
 
         if (simulate) return true;
 
-        if (!pLevel.getBlockState(pPos.relative(flowDirection)).isAir())
+        if (!pLevel.getBlockState(pPos.relative(flowDirection)).isAir() && getMovementHandler(pLevel).getDensity(pPos.relative(flowDirection)) == 0)
             beforeDestroyingBlock(pLevel, pPos.relative(flowDirection), pLevel.getBlockState(pPos.relative(flowDirection)));
 
         getMovementHandler(pLevel).move(pPos, Math.min(pState.getValue(FlowingGas.DENSITY), MAX_DENSITY - getMovementHandler(pLevel).getDensity(pPos.relative(flowDirection))), flowDirection);
@@ -359,7 +360,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
 
         for (Map.Entry<BlockPos, Integer> entry : addedAmountMap.entrySet()) {
             BlockPos pos = entry.getKey();
-            if (!pLevel.getBlockState(pos).isAir())
+            if (!pLevel.getBlockState(pos).isAir() && getMovementHandler(pLevel).getDensity(pos) == 0)
                 beforeDestroyingBlock(pLevel, pos, pLevel.getBlockState(pos));
 
             getMovementHandler(pLevel).operations.add(GasMovementHandler.GasMovement.create()
@@ -425,6 +426,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
 
                 particle.setColor(FastColor.ARGB32.red(color) / 256f, FastColor.ARGB32.green(color) / 256f, FastColor.ARGB32.blue(color) / 256f);
                 particle.setLifetime(time);
+                ((CloudParticleMarkingAccess) particle).unlimitedFluidity$markAsGasParticle(this);
             }
     }
 
@@ -558,11 +560,12 @@ public abstract class FlowingGas extends BehaviorableFluid {
     }
 
     @Override
-    public List<IFluidBehavior> getBehaviors() {
+    public List<IFluidBehavior> getUncheckedBehaviors() {
         List<IFluidBehavior> behaviors = new ArrayList<>();
 
         // Temporary STARTS
         behaviors.add(new HydrateBehavior(true));
+        behaviors.add(new FlammableBehaviorImpl());
         // Temporary ENDS
 
         behaviors.add(new IFluidBehavior() {

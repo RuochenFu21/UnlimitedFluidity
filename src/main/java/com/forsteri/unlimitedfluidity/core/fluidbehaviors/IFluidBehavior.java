@@ -2,12 +2,14 @@ package com.forsteri.unlimitedfluidity.core.fluidbehaviors;
 
 import com.forsteri.unlimitedfluidity.util.Api;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * <p>Fluid behavior interface</p>
@@ -35,18 +37,26 @@ public interface IFluidBehavior {
         return false;
     }
 
-    //TODO: Add effect to this
     /**
-     * <p>Called when there's an entity ticking inside the fluid</p>
+     * <p>Called when the block's neighbor changed</p>
+     * <p>require {@link IFluidBehavior#requireBlockBeBehaviorable()} to be true</p>
      * @since       2.0
      * **/
     @Api
-    default void onEntityInside(LevelAccessor worldIn, Entity entity) {}
+    default void neighborChange(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos thisPos, @NotNull Block block, @NotNull BlockPos neighborPos, boolean idkRandomParameter) {}
 
-    default boolean onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
-        return false;
+    /**
+     * <p>Getting the object's flammability, </p>
+     * <p>require {@link IFluidBehavior#requireBlockBeBehaviorable()} to be true</p>
+     * @return Chance that fire will spread and consume this block, 300 being a 100% chance, 0, being a 0% chance.
+     * @since       2.0
+     * **/
+    @Api
+    default int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        return 0;
     }
 
+    @Api
     default boolean requireBlockBeBehaviorable() {
         return false;
     }

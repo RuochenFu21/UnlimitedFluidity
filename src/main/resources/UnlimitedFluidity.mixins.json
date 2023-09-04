@@ -13,6 +13,7 @@
     "behavioreffect.MixinSugarCaneBlock"
   ],
   "client": [
+    "MixinPlayerCloudParticle"
   ],
   "injectors": {
     "defaultRequire": 1

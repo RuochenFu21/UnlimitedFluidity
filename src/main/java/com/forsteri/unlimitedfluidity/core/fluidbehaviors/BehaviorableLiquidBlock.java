@@ -1,10 +1,14 @@
 package com.forsteri.unlimitedfluidity.core.fluidbehaviors;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -20,11 +24,17 @@ public class BehaviorableLiquidBlock extends LiquidBlock implements IBehaviorabl
     }
 
     @Override
-    public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
-        if (getBehaviors().stream().anyMatch(behavior -> behavior.onNeighborChange(state, level, pos, neighbor)))
-            return;
+    public void neighborChanged(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos thisPos, @NotNull Block block, @NotNull BlockPos neighborPos, boolean idkRandomParameter) {
+        getBehaviors().forEach(behavior -> behavior.neighborChange(state, level, thisPos, block, neighborPos, idkRandomParameter));
 
-        super.onNeighborChange(state, level, pos, neighbor);
+        super.neighborChanged(state, level, thisPos, block, neighborPos, idkRandomParameter);
+    }
+
+    @Override
+    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        List<Integer> list = new java.util.ArrayList<>(getBehaviors().stream().map(behavior -> behavior.getFlammability(state, level, pos, direction)).toList());
+        list.add(super.getFlammability(state, level, pos, direction));
+        return list.stream().max(Integer::compareTo).orElse(0);
     }
 
     public List<IFluidBehavior> getBehaviors() {

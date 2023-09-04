@@ -49,8 +49,16 @@ public abstract class BehaviorableFluid extends SmartFluid implements IBehaviora
 
     public List<IFluidBehavior> getBehaviors() {
         List<IFluidBehavior> uncheckedBehaviors = getUncheckedBehaviors();
-        if (uncheckedBehaviors.stream().anyMatch(IFluidBehavior::requireBlockBeBehaviorable) && this.createLegacyBlock(this.defaultFluidState()).getBlock() instanceof BehaviorableLiquidBlock)
-            throw new IllegalStateException("Fluid " + this + " has a behavior that requires the block to be a BehaviorableLiquidBlock, but the block is not a BehaviorableLiquidBlock");
+        BlockState blockState = this.createLegacyBlock(this.defaultFluidState());
+        if (blockState.isAir()) {
+            System.out.println("Fluid " + this + " has no block, returning empty list");
+            return new ArrayList<>();
+        }
+        if (uncheckedBehaviors.stream().anyMatch(IFluidBehavior::requireBlockBeBehaviorable) && !(blockState.getBlock() instanceof BehaviorableLiquidBlock))
+            throw new IllegalStateException(
+                    "Fluid " + this + ", has a behavior that requires the block to be a BehaviorableLiquidBlock, " +
+                    "but the block is not a BehaviorableLiquidBlock, the block is " + blockState.getBlock().getClass().getSimpleName()
+            );
 
         return uncheckedBehaviors;
     }

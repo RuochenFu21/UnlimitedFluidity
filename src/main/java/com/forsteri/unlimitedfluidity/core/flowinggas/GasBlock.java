@@ -1,8 +1,8 @@
 package com.forsteri.unlimitedfluidity.core.flowinggas;
 
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableLiquidBlock;
 import com.forsteri.unlimitedfluidity.util.Api;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  * @since       1.0
  */
 @Api
-public class GasBlock extends LiquidBlock {
+public class GasBlock extends BehaviorableLiquidBlock {
     public static final IntegerProperty DENSITY = FlowingGas.DENSITY;
 
     public GasBlock(Supplier<? extends FlowingFluid> p_54694_, Properties p_54695_) {
