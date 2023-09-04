@@ -108,32 +108,37 @@ extends <a href="../onTouch/IInteractionWithNeighborBlockUpdateBehavior.html" ti
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Behavior after the block is burnt</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getFlammability(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.BlockGetter,net.minecraft.core.BlockPos,net.minecraft.core.Direction)" class="member-name-link">getFlammability</a><wbr>(net.minecraft.world.level.block.state.BlockState&nbsp;state,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default net.minecraft.world.phys.AABB</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#entityBurningArea(net.minecraft.core.BlockPos)" class="member-name-link">entityBurningArea</a><wbr>(net.minecraft.core.BlockPos&nbsp;pos)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Area that the entity will be burnt</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getFlammability(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.BlockGetter,net.minecraft.core.BlockPos,net.minecraft.core.Direction)" class="member-name-link">getFlammability</a><wbr>(net.minecraft.world.level.block.state.BlockState&nbsp;state,
  net.minecraft.world.level.BlockGetter&nbsp;level,
  net.minecraft.core.BlockPos&nbsp;pos,
  net.minecraft.core.Direction&nbsp;direction)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Getting the object's flammability,</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#interactWithBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)" class="member-name-link">interactWithBlock</a><wbr>(@NotNull net.minecraft.world.level.LevelAccessor&nbsp;level,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#interactWithBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)" class="member-name-link">interactWithBlock</a><wbr>(@NotNull net.minecraft.world.level.LevelAccessor&nbsp;level,
  @NotNull net.minecraft.core.BlockPos&nbsp;pos,
  @NotNull net.minecraft.world.level.block.state.BlockState&nbsp;interactant)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Interact with a block</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#spawnParticles(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos)" class="member-name-link">spawnParticles</a><wbr>(net.minecraft.world.level.LevelAccessor&nbsp;level,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#spawnParticles(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos)" class="member-name-link">spawnParticles</a><wbr>(net.minecraft.world.level.LevelAccessor&nbsp;level,
  net.minecraft.core.BlockPos&nbsp;pos)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Spawn the flame particles</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#tick(net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.level.material.FluidState)" class="member-name-link">tick</a><wbr>(net.minecraft.world.level.Level&nbsp;p_76113_,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#tick(net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.level.material.FluidState)" class="member-name-link">tick</a><wbr>(net.minecraft.world.level.Level&nbsp;p_76113_,
  net.minecraft.core.BlockPos&nbsp;p_76114_,
  net.minecraft.world.level.material.FluidState&nbsp;p_76115_)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Called when the fluid ticks</div>
 </div>
 </div>
@@ -223,6 +228,17 @@ extends <a href="../onTouch/IInteractionWithNeighborBlockUpdateBehavior.html" ti
 <dt>Parameters:</dt>
 <dd><code>level</code> - the level</dd>
 <dd><code>pos</code> - the position</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="entityBurningArea(net.minecraft.core.BlockPos)">
+<h3>entityBurningArea</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">net.minecraft.world.phys.AABB</span>&nbsp;<span class="element-name">entityBurningArea</span><wbr><span class="parameters">(net.minecraft.core.BlockPos&nbsp;pos)</span></div>
+<div class="block">Area that the entity will be burnt</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>pos</code> - the center</dd>
 </dl>
 </section>
 </li>
