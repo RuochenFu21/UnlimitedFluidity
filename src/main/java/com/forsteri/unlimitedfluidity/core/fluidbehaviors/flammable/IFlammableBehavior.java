@@ -65,9 +65,17 @@ public interface IFlammableBehavior extends IInteractionWithNeighborBlockUpdateB
      */
     default void afterBurnt(LevelAccessor level, BlockPos pos) {
         level.setBlock(pos, Blocks.FIRE.defaultBlockState(), 11);
-        level.getEntities((Entity) null, new AABB(pos).expandTowards(1.0, 1.0, 1.0).expandTowards(-1.0, -1.0, -1.0), entity -> entity instanceof LivingEntity).forEach(
+        level.getEntities((Entity) null, entityBurningArea(pos), entity -> entity instanceof LivingEntity).forEach(
                 entity -> entity.setSecondsOnFire(5)
         );
+    }
+
+    /**
+     * Area that the entity will be burnt
+     * @param pos the center
+     */
+    default AABB entityBurningArea(BlockPos pos) {
+        return new AABB(pos).expandTowards(1.0, 1.0, 1.0).expandTowards(-1.0, -1.0, -1.0);
     }
 
     @Override
