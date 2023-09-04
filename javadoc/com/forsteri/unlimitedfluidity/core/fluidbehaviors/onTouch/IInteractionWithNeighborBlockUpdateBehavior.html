@@ -68,20 +68,24 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch</a></div>
-<h1 title="Interface IInteractionWithNeighborBlockUpdateBehavior" class="title">Interface IInteractionWithNeighborBlockUpdateBehavior&lt;T&gt;</h1>
+<h1 title="Interface IInteractionWithNeighborBlockUpdateBehavior" class="title">Interface IInteractionWithNeighborBlockUpdateBehavior</h1>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
-<dt>Type Parameters:</dt>
-<dd><code>T</code> - The type of the return value of the interaction, just a bit of customization</dd>
+<dt>All Superinterfaces:</dt>
+<dd><code><a href="../IFluidBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IFluidBehavior</a></code>, <code><a href="IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a></code>, <code><a href="IInteractionBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionBehavior</a></code>, <code><a href="IInteractionWithNeighborBlockUpdate.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdate</a></code></dd>
 </dl>
 <dl class="notes">
-<dt>All Superinterfaces:</dt>
-<dd><code><a href="../IFluidBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IFluidBehavior</a></code>, <code><a href="IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a>&lt;T&gt;</code>, <code><a href="IInteractionBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionBehavior</a>&lt;T&gt;</code>, <code><a href="IInteractionWithNeighborBlockUpdate.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdate</a>&lt;T&gt;</code></dd>
+<dt>All Known Subinterfaces:</dt>
+<dd><code><a href="../flammable/IFlammableBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable">IFlammableBehavior</a></code></dd>
+</dl>
+<dl class="notes">
+<dt>All Known Implementing Classes:</dt>
+<dd><code><a href="../flammable/FlammableBehaviorImpl.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable">FlammableBehaviorImpl</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">IInteractionWithNeighborBlockUpdateBehavior&lt;T&gt;</span><span class="extends-implements">
-extends <a href="IInteractionWithNeighborBlockUpdate.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdate</a>&lt;T&gt;, <a href="IInteractionBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionBehavior</a>&lt;T&gt;</span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">IInteractionWithNeighborBlockUpdateBehavior</span><span class="extends-implements">
+extends <a href="IInteractionBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionBehavior</a>, <a href="IInteractionWithNeighborBlockUpdate.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdate</a></span></div>
 <div class="block"><p>This interface is where you actually implement the behavior of the fluid.</p></div>
 <dl class="notes">
 <dt>Since:</dt>
@@ -101,12 +105,16 @@ extends <a href="IInteractionWithNeighborBlockUpdate.html" title="interface in c
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#onNeighborChange(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.core.BlockPos)" class="member-name-link">onNeighborChange</a><wbr>(net.minecraft.world.level.block.state.BlockState&nbsp;state,
- net.minecraft.world.level.LevelReader&nbsp;level,
- net.minecraft.core.BlockPos&nbsp;pos,
- net.minecraft.core.BlockPos&nbsp;neighbor)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#neighborChange(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.level.block.Block,net.minecraft.core.BlockPos,boolean)" class="member-name-link">neighborChange</a><wbr>(@NotNull net.minecraft.world.level.block.state.BlockState&nbsp;state,
+ @NotNull net.minecraft.world.level.Level&nbsp;level,
+ @NotNull net.minecraft.core.BlockPos&nbsp;thisPos,
+ @NotNull net.minecraft.world.level.block.Block&nbsp;block,
+ @NotNull net.minecraft.core.BlockPos&nbsp;neighborPos,
+ boolean&nbsp;idkRandomParameter)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Called when the block's neighbor changed</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#requireBlockBeBehaviorable()" class="member-name-link">requireBlockBeBehaviorable</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
@@ -115,16 +123,16 @@ extends <a href="IInteractionWithNeighborBlockUpdate.html" title="interface in c
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-com.forsteri.unlimitedfluidity.core.fluidbehaviors.IFluidBehavior">Methods inherited from interface&nbsp;com.forsteri.unlimitedfluidity.core.fluidbehaviors.<a href="../IFluidBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IFluidBehavior</a></h3>
-<code><a href="../IFluidBehavior.html#onEntityInside(net.minecraft.world.level.LevelAccessor,net.minecraft.world.entity.Entity)">onEntityInside</a>, <a href="../IFluidBehavior.html#tick(net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.level.material.FluidState)">tick</a></code></div>
+<code><a href="../IFluidBehavior.html#getFlammability(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.BlockGetter,net.minecraft.core.BlockPos,net.minecraft.core.Direction)">getFlammability</a>, <a href="../IFluidBehavior.html#tick(net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.level.material.FluidState)">tick</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.IInteraction">Methods inherited from interface&nbsp;com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a></h3>
-<code><a href="IInteraction.html#interactWithBlock(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">interactWithBlock</a>, <a href="IInteraction.html#interactWithBlockDestroyed(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">interactWithBlockDestroyed</a>, <a href="IInteraction.html#interactWithEntity(net.minecraft.core.BlockPos,net.minecraft.world.entity.Entity)">interactWithEntity</a>, <a href="IInteraction.html#interactWithFluid(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.level.material.Fluid)">interactWithFluid</a>, <a href="IInteraction.html#interactWithItem(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.item.ItemStack)">interactWithItem</a></code></div>
+<code><a href="IInteraction.html#interactWithBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">interactWithBlock</a>, <a href="IInteraction.html#interactWithBlockDestroyed(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">interactWithBlockDestroyed</a>, <a href="IInteraction.html#interactWithEntity(net.minecraft.core.BlockPos,net.minecraft.world.entity.Entity)">interactWithEntity</a>, <a href="IInteraction.html#interactWithFluid(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.material.Fluid)">interactWithFluid</a>, <a href="IInteraction.html#interactWithItem(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.item.ItemStack)">interactWithItem</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.IInteractionBehavior">Methods inherited from interface&nbsp;com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="IInteractionBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionBehavior</a></h3>
 <code><a href="IInteractionBehavior.html#beforeDestroyingBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">beforeDestroyingBlock</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.IInteractionWithNeighborBlockUpdate">Methods inherited from interface&nbsp;com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="IInteractionWithNeighborBlockUpdate.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdate</a></h3>
-<code><a href="IInteractionWithNeighborBlockUpdate.html#interactWithNeighborBlock(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.core.BlockPos)">interactWithNeighborBlock</a></code></div>
+<code><a href="IInteractionWithNeighborBlockUpdate.html#interactWithNeighborBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.core.BlockPos)">interactWithNeighborBlock</a></code></div>
 </section>
 </li>
 </ul>
@@ -137,15 +145,25 @@ extends <a href="IInteractionWithNeighborBlockUpdate.html" title="interface in c
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="onNeighborChange(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.core.BlockPos)">
-<h3>onNeighborChange</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">onNeighborChange</span><wbr><span class="parameters">(net.minecraft.world.level.block.state.BlockState&nbsp;state,
- net.minecraft.world.level.LevelReader&nbsp;level,
- net.minecraft.core.BlockPos&nbsp;pos,
- net.minecraft.core.BlockPos&nbsp;neighbor)</span></div>
+<section class="detail" id="neighborChange(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.level.block.Block,net.minecraft.core.BlockPos,boolean)">
+<h3>neighborChange</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">neighborChange</span><wbr><span class="parameters">(@NotNull
+ @NotNull net.minecraft.world.level.block.state.BlockState&nbsp;state,
+ @NotNull
+ @NotNull net.minecraft.world.level.Level&nbsp;level,
+ @NotNull
+ @NotNull net.minecraft.core.BlockPos&nbsp;thisPos,
+ @NotNull
+ @NotNull net.minecraft.world.level.block.Block&nbsp;block,
+ @NotNull
+ @NotNull net.minecraft.core.BlockPos&nbsp;neighborPos,
+ boolean&nbsp;idkRandomParameter)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../IFluidBehavior.html#neighborChange(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.level.block.Block,net.minecraft.core.BlockPos,boolean)">IFluidBehavior</a></code></span></div>
+<div class="block"><p>Called when the block's neighbor changed</p>
+ <p>require <a href="../IFluidBehavior.html#requireBlockBeBehaviorable()"><code>IFluidBehavior.requireBlockBeBehaviorable()</code></a> to be true</p></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../IFluidBehavior.html#onNeighborChange(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.core.BlockPos)">onNeighborChange</a></code>&nbsp;in interface&nbsp;<code><a href="../IFluidBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IFluidBehavior</a></code></dd>
+<dd><code><a href="../IFluidBehavior.html#neighborChange(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.level.block.Block,net.minecraft.core.BlockPos,boolean)">neighborChange</a></code>&nbsp;in interface&nbsp;<code><a href="../IFluidBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IFluidBehavior</a></code></dd>
 </dl>
 </section>
 </li>

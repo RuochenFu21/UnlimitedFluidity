@@ -68,20 +68,20 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch</a></div>
-<h1 title="Interface IInteraction" class="title">Interface IInteraction&lt;T&gt;</h1>
+<h1 title="Interface IInteraction" class="title">Interface IInteraction</h1>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
-<dt>Type Parameters:</dt>
-<dd><code>T</code> - The type of the return value of the interaction, just a bit of customization</dd>
+<dt>All Known Subinterfaces:</dt>
+<dd><code><a href="../flammable/IFlammableBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable">IFlammableBehavior</a></code>, <code><a href="IInteractionBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionBehavior</a></code>, <code><a href="IInteractionWithNeighborBlockUpdate.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdate</a></code>, <code><a href="IInteractionWithNeighborBlockUpdateBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdateBehavior</a></code></dd>
 </dl>
 <dl class="notes">
-<dt>All Known Subinterfaces:</dt>
-<dd><code><a href="IInteractionBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionBehavior</a>&lt;T&gt;</code>, <code><a href="IInteractionWithNeighborBlockUpdate.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdate</a>&lt;T&gt;</code>, <code><a href="IInteractionWithNeighborBlockUpdateBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdateBehavior</a>&lt;T&gt;</code></dd>
+<dt>All Known Implementing Classes:</dt>
+<dd><code><a href="../flammable/FlammableBehaviorImpl.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable">FlammableBehaviorImpl</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations">@ParametersAreNonnullByDefault
-</span><span class="modifiers">public interface </span><span class="element-name type-name-label">IInteraction&lt;T&gt;</span></div>
+</span><span class="modifiers">public interface </span><span class="element-name type-name-label">IInteraction</span></div>
 <div class="block"><p>Api for creating behavior interface that have interactions between entity, block, fluid, or item</p>
  <p>I split this from <a href="IInteractionBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch"><code>IInteractionBehavior</code></a> just because to separate the abstract interactions and functionality implementation, usually you will neven need this class</p>
  <p>Usually you will never need this, just use <a href="IInteractionBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch"><code>IInteractionBehavior</code></a></p></div>
@@ -103,35 +103,35 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="IInteraction.html" title="type parameter in IInteraction">T</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#interactWithBlock(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)" class="member-name-link">interactWithBlock</a><wbr>(net.minecraft.world.level.LevelReader&nbsp;level,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#interactWithBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)" class="member-name-link">interactWithBlock</a><wbr>(net.minecraft.world.level.LevelAccessor&nbsp;level,
  net.minecraft.core.BlockPos&nbsp;pos,
  net.minecraft.world.level.block.state.BlockState&nbsp;interactant)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Interact with a block</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="IInteraction.html" title="type parameter in IInteraction">T</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#interactWithBlockDestroyed(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)" class="member-name-link">interactWithBlockDestroyed</a><wbr>(net.minecraft.world.level.LevelReader&nbsp;level,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#interactWithBlockDestroyed(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)" class="member-name-link">interactWithBlockDestroyed</a><wbr>(net.minecraft.world.level.LevelAccessor&nbsp;level,
  net.minecraft.core.BlockPos&nbsp;pos,
  net.minecraft.world.level.block.state.BlockState&nbsp;interactant)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Interact with a block *when* the fluid destroyed the block</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="IInteraction.html" title="type parameter in IInteraction">T</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#interactWithEntity(net.minecraft.core.BlockPos,net.minecraft.world.entity.Entity)" class="member-name-link">interactWithEntity</a><wbr>(net.minecraft.core.BlockPos&nbsp;pos,
  net.minecraft.world.entity.Entity&nbsp;interactant)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Interact with an entity</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="IInteraction.html" title="type parameter in IInteraction">T</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#interactWithFluid(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.level.material.Fluid)" class="member-name-link">interactWithFluid</a><wbr>(net.minecraft.world.level.LevelReader&nbsp;level,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#interactWithFluid(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.material.Fluid)" class="member-name-link">interactWithFluid</a><wbr>(net.minecraft.world.level.LevelAccessor&nbsp;level,
  net.minecraft.core.BlockPos&nbsp;pos,
  net.minecraft.world.level.material.Fluid&nbsp;interactant)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Interact with a fluid</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="IInteraction.html" title="type parameter in IInteraction">T</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#interactWithItem(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.item.ItemStack)" class="member-name-link">interactWithItem</a><wbr>(net.minecraft.world.level.LevelReader&nbsp;level,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#interactWithItem(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.item.ItemStack)" class="member-name-link">interactWithItem</a><wbr>(net.minecraft.world.level.LevelAccessor&nbsp;level,
  net.minecraft.core.BlockPos&nbsp;pos,
  net.minecraft.world.item.ItemStack&nbsp;interactant)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
@@ -154,65 +154,59 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="interactWithEntity(net.minecraft.core.BlockPos,net.minecraft.world.entity.Entity)">
 <h3>interactWithEntity</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="IInteraction.html" title="type parameter in IInteraction">T</a></span>&nbsp;<span class="element-name">interactWithEntity</span><wbr><span class="parameters">(net.minecraft.core.BlockPos&nbsp;pos,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">interactWithEntity</span><wbr><span class="parameters">(net.minecraft.core.BlockPos&nbsp;pos,
  net.minecraft.world.entity.Entity&nbsp;interactant)</span></div>
 <div class="block"><p>Interact with an entity</p>
- <p>This will default call <a href="#interactWithItem(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.item.ItemStack)"><code>interactWithItem(LevelReader, BlockPos, ItemStack)</code></a></p> when it's a <code>ItemEntity</code></div>
+ <p>This will default call <a href="#interactWithItem(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.item.ItemStack)"><code>interactWithItem(LevelAccessor, BlockPos, ItemStack)</code></a></p> when it's a <code>ItemEntity</code></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>pos</code> - The position of the block</dd>
-<dd><code>interactant</code> - The entity that is interacting with the block</dd>
-<dt>Returns:</dt>
-<dd>The return value, default null</dd>
+<dd><code>interactant</code> - The entity that is interacting with the fluid</dd>
 <dt>Since:</dt>
 <dd>2.0</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="interactWithBlock(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">
+<section class="detail" id="interactWithBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">
 <h3>interactWithBlock</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="IInteraction.html" title="type parameter in IInteraction">T</a></span>&nbsp;<span class="element-name">interactWithBlock</span><wbr><span class="parameters">(net.minecraft.world.level.LevelReader&nbsp;level,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">interactWithBlock</span><wbr><span class="parameters">(net.minecraft.world.level.LevelAccessor&nbsp;level,
  net.minecraft.core.BlockPos&nbsp;pos,
  net.minecraft.world.level.block.state.BlockState&nbsp;interactant)</span></div>
 <div class="block"><p>Interact with a block</p>
- <p>This will default call <a href="#interactWithFluid(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.level.material.Fluid)"><code>interactWithFluid(LevelReader, BlockPos, Fluid)</code></a> when the block has a fluid state</p></div>
+ <p>This will default call <a href="#interactWithFluid(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.material.Fluid)"><code>interactWithFluid(LevelAccessor, BlockPos, Fluid)</code></a> when the block has a fluid state</p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>level</code> - The level</dd>
 <dd><code>pos</code> - The position of the block</dd>
-<dd><code>interactant</code> - The block that is interacting with the block</dd>
-<dt>Returns:</dt>
-<dd>The return value, default null</dd>
+<dd><code>interactant</code> - The block that is interacting with the fluid</dd>
 <dt>Since:</dt>
 <dd>2.0</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="interactWithBlockDestroyed(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">
+<section class="detail" id="interactWithBlockDestroyed(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">
 <h3>interactWithBlockDestroyed</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="IInteraction.html" title="type parameter in IInteraction">T</a></span>&nbsp;<span class="element-name">interactWithBlockDestroyed</span><wbr><span class="parameters">(net.minecraft.world.level.LevelReader&nbsp;level,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">interactWithBlockDestroyed</span><wbr><span class="parameters">(net.minecraft.world.level.LevelAccessor&nbsp;level,
  net.minecraft.core.BlockPos&nbsp;pos,
  net.minecraft.world.level.block.state.BlockState&nbsp;interactant)</span></div>
 <div class="block"><p>Interact with a block *when* the fluid destroyed the block</p>
- <p>This will default redirect to <a href="#interactWithBlock(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)"><code>interactWithBlock(LevelReader, BlockPos, BlockState)</code></a></p></div>
+ <p>This will default redirect to <a href="#interactWithBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)"><code>interactWithBlock(LevelAccessor, BlockPos, BlockState)</code></a></p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>level</code> - The level</dd>
 <dd><code>pos</code> - The position of the block</dd>
-<dd><code>interactant</code> - The block that is interacting with the block</dd>
-<dt>Returns:</dt>
-<dd>The return value, default null</dd>
+<dd><code>interactant</code> - The block that is interacting with the fluid</dd>
 <dt>Since:</dt>
 <dd>2.0</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="interactWithFluid(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.level.material.Fluid)">
+<section class="detail" id="interactWithFluid(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.material.Fluid)">
 <h3>interactWithFluid</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="IInteraction.html" title="type parameter in IInteraction">T</a></span>&nbsp;<span class="element-name">interactWithFluid</span><wbr><span class="parameters">(net.minecraft.world.level.LevelReader&nbsp;level,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">interactWithFluid</span><wbr><span class="parameters">(net.minecraft.world.level.LevelAccessor&nbsp;level,
  net.minecraft.core.BlockPos&nbsp;pos,
  net.minecraft.world.level.material.Fluid&nbsp;interactant)</span></div>
 <div class="block"><p>Interact with a fluid</p></div>
@@ -220,18 +214,16 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>level</code> - The level</dd>
 <dd><code>pos</code> - The position of the block</dd>
-<dd><code>interactant</code> - The fluid that is interacting with the block</dd>
-<dt>Returns:</dt>
-<dd>The return value, default null</dd>
+<dd><code>interactant</code> - The fluid that is interacting with the fluid</dd>
 <dt>Since:</dt>
 <dd>2.0</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="interactWithItem(net.minecraft.world.level.LevelReader,net.minecraft.core.BlockPos,net.minecraft.world.item.ItemStack)">
+<section class="detail" id="interactWithItem(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.item.ItemStack)">
 <h3>interactWithItem</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="IInteraction.html" title="type parameter in IInteraction">T</a></span>&nbsp;<span class="element-name">interactWithItem</span><wbr><span class="parameters">(net.minecraft.world.level.LevelReader&nbsp;level,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">interactWithItem</span><wbr><span class="parameters">(net.minecraft.world.level.LevelAccessor&nbsp;level,
  net.minecraft.core.BlockPos&nbsp;pos,
  net.minecraft.world.item.ItemStack&nbsp;interactant)</span></div>
 <div class="block"><p>Interact with an item</p></div>
@@ -239,9 +231,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>level</code> - The level</dd>
 <dd><code>pos</code> - The position of the block</dd>
-<dd><code>interactant</code> - The item that is interacting with the block</dd>
-<dt>Returns:</dt>
-<dd>The return value, default null</dd>
+<dd><code>interactant</code> - The item that is interacting with the fluid</dd>
 <dt>Since:</dt>
 <dd>2.0</dd>
 </dl>
