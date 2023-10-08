@@ -230,7 +230,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>protected static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;net.minecraft.core.BlockPos,<wbr>net.minecraft.core.Direction&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getGasMap(net.minecraft.world.level.LevelAccessor)" class="member-name-link">getGasMap</a><wbr>(net.minecraft.world.level.LevelAccessor&nbsp;level)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.jgrapht.graph.AbstractBaseGraph&lt;net.minecraft.core.BlockPos,<wbr>org.jgrapht.graph.DefaultEdge&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.jgrapht.graph.SimpleWeightedGraph&lt;net.minecraft.core.BlockPos,<wbr>org.jgrapht.graph.DefaultWeightedEdge&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getGraph(net.minecraft.world.level.LevelAccessor)" class="member-name-link">getGraph</a><wbr>(net.minecraft.world.level.LevelAccessor&nbsp;level)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="GasMovementHandler.html" title="class in com.forsteri.unlimitedfluidity.core.flowinggas">GasMovementHandler</a></code></div>
@@ -264,9 +264,8 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Random.html" title="class or interface in java.util" class="external-link">Random</a>&nbsp;pRandom)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#render(net.minecraft.world.level.BlockAndTintGetter,net.minecraft.core.BlockPos,com.forsteri.unlimitedfluidity.core.flowinggas.FlowingGas,int,int)" class="member-name-link">render</a><wbr>(net.minecraft.world.level.BlockAndTintGetter&nbsp;pLevel,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#render(net.minecraft.world.level.BlockAndTintGetter,net.minecraft.core.BlockPos,int,int)" class="member-name-link">render</a><wbr>(net.minecraft.world.level.BlockAndTintGetter&nbsp;pLevel,
  net.minecraft.core.BlockPos&nbsp;pPos,
- <a href="FlowingGas.html" title="class in com.forsteri.unlimitedfluidity.core.flowinggas">FlowingGas</a>&nbsp;gas,
  int&nbsp;amount,
  int&nbsp;time)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -413,7 +412,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getGraph(net.minecraft.world.level.LevelAccessor)">
 <h3>getGraph</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.jgrapht.graph.AbstractBaseGraph&lt;net.minecraft.core.BlockPos,<wbr>org.jgrapht.graph.DefaultEdge&gt;</span>&nbsp;<span class="element-name">getGraph</span><wbr><span class="parameters">(net.minecraft.world.level.LevelAccessor&nbsp;level)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.jgrapht.graph.SimpleWeightedGraph&lt;net.minecraft.core.BlockPos,<wbr>org.jgrapht.graph.DefaultWeightedEdge&gt;</span>&nbsp;<span class="element-name">getGraph</span><wbr><span class="parameters">(net.minecraft.world.level.LevelAccessor&nbsp;level)</span></div>
 </section>
 </li>
 <li>
@@ -562,11 +561,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="render(net.minecraft.world.level.BlockAndTintGetter,net.minecraft.core.BlockPos,com.forsteri.unlimitedfluidity.core.flowinggas.FlowingGas,int,int)">
+<section class="detail" id="render(net.minecraft.world.level.BlockAndTintGetter,net.minecraft.core.BlockPos,int,int)">
 <h3>render</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">render</span><wbr><span class="parameters">(net.minecraft.world.level.BlockAndTintGetter&nbsp;pLevel,
  net.minecraft.core.BlockPos&nbsp;pPos,
- <a href="FlowingGas.html" title="class in com.forsteri.unlimitedfluidity.core.flowinggas">FlowingGas</a>&nbsp;gas,
  int&nbsp;amount,
  int&nbsp;time)</span></div>
 </section>
