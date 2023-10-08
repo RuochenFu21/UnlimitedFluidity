@@ -427,7 +427,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
 
                 particle.setColor(FastColor.ARGB32.red(color) / 256f, FastColor.ARGB32.green(color) / 256f, FastColor.ARGB32.blue(color) / 256f);
                 particle.setLifetime(time);
-                ((CloudParticleMarkingAccess) particle).unlimitedFluidity$markAsGasParticle(this);
+//                ((CloudParticleMarkingAccess) particle).unlimitedFluidity$markAsGasParticle(this);
             }
     }
 

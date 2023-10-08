@@ -2,6 +2,8 @@ package com.forsteri.unlimitedfluidity.core.flowinggas;
 
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableLiquidBlock;
 import com.forsteri.unlimitedfluidity.util.Api;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -35,5 +37,10 @@ public class GasBlock extends BehaviorableLiquidBlock {
     public @NotNull FluidState getFluidState(BlockState pState) {
         int level = pState.getValue(DENSITY);
         return level == FlowingGas.MAX_DENSITY ? getFluid().getSource(false) : getFluid().getFlowing(level, false);
+    }
+
+    @Override
+    public boolean propagatesSkylightDown(@NotNull BlockState p_153695_, @NotNull BlockGetter p_153696_, @NotNull BlockPos p_153697_) {
+        return true;
     }
 }
