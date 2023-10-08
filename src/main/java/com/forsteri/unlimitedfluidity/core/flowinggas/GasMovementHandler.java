@@ -6,9 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jgrapht.graph.AbstractBaseGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DefaultUndirectedGraph;
+import org.jgrapht.graph.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +19,7 @@ public class GasMovementHandler {
     protected final LevelAccessor level;
     protected final FlowingGas source;
 
-    private AbstractBaseGraph<BlockPos, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+    private SimpleWeightedGraph<BlockPos, DefaultWeightedEdge> graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
     private GasMovementHandler(LevelAccessor level, FlowingGas source) {
         this.level = level;
@@ -82,11 +80,11 @@ public class GasMovementHandler {
                 .increase(pos.relative(direction), density));
     }
 
-    public AbstractBaseGraph<BlockPos, DefaultEdge> getGraph() {
+    public SimpleWeightedGraph<BlockPos, DefaultWeightedEdge> getGraph() {
         return graph;
     }
 
-    public void setGraph(AbstractBaseGraph<BlockPos, DefaultEdge> graph) {
+    public void setGraph(SimpleWeightedGraph<BlockPos, DefaultWeightedEdge> graph) {
         this.graph = graph;
     }
 

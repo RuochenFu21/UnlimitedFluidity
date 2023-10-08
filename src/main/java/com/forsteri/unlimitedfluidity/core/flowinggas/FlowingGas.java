@@ -34,7 +34,8 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.BFSShortestPath;
 import org.jgrapht.graph.AbstractBaseGraph;
-import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleWeightedGraph;
 import org.jgrapht.traverse.BreadthFirstIterator;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -88,7 +89,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
         return GasMovementHandler.getOrCreate(level, this);
     }
 
-    public AbstractBaseGraph<BlockPos, DefaultEdge> getGraph(LevelAccessor level) {
+    public SimpleWeightedGraph<BlockPos, DefaultWeightedEdge> getGraph(LevelAccessor level) {
         return getMovementHandler(level).getGraph();
     }
 
@@ -178,7 +179,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
             throw new IllegalStateException("Graph is not a AbstractBaseGraph!");
 
         @SuppressWarnings("unchecked")
-        AbstractBaseGraph<BlockPos, DefaultEdge> graph = (AbstractBaseGraph<BlockPos, DefaultEdge>) copied;
+        AbstractBaseGraph<BlockPos, DefaultWeightedEdge> graph = (AbstractBaseGraph<BlockPos, DefaultWeightedEdge>) copied;
 
         boolean hasDestination = false;
         BlockPos destination = null;
@@ -205,9 +206,9 @@ public abstract class FlowingGas extends BehaviorableFluid {
 
         if (!hasDestination) return false;
 
-        BFSShortestPath<BlockPos, DefaultEdge> pathFinder = new BFSShortestPath<>(graph);
+        BFSShortestPath<BlockPos, DefaultWeightedEdge> pathFinder = new BFSShortestPath<>(graph);
 
-        GraphPath<BlockPos, DefaultEdge> path = pathFinder.getPath(pPos, destination);
+        GraphPath<BlockPos, DefaultWeightedEdge> path = pathFinder.getPath(pPos, destination);
 
         if (path.getVertexList().size() <= 1) return false;
 
@@ -255,7 +256,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
     }
 
     protected boolean spreadHorizontally(LevelAccessor pLevel, BlockPos pPos, boolean simulated) {
-        Graph<BlockPos, DefaultEdge> graph = getGraph(pLevel);
+        Graph<BlockPos, DefaultWeightedEdge> graph = getGraph(pLevel);
         int totalDensity = getMovementHandler(pLevel).getDensity(pPos);
         int space = 1;
         HashMap<BlockPos, Integer> addedAmountMap = new HashMap<>();
@@ -399,22 +400,22 @@ public abstract class FlowingGas extends BehaviorableFluid {
 
     @Override
     protected void animateTick(Level p_76116_, BlockPos pPos, FluidState p_76118_, Random p_76119_) {
-        if (!(p_76118_.getType() instanceof FlowingGas gas))
+        if (!(p_76118_.getType() instanceof FlowingGas))
             return;
 
-        render(p_76116_, pPos, gas, 3, 160);
+        render(p_76116_, pPos, 3, 160);
     }
 
-    public void render(BlockAndTintGetter pLevel, BlockPos pPos, FlowingGas gas, int amount, int time) {
+    public void render(BlockAndTintGetter pLevel, BlockPos pPos, int amount, int time) {
         ArrayList<Triple<Double, Double, Double>> particleDirections = new ArrayList<>();
 
         particleDirections.add(Triple.of(0D, 0D, 0D));
 
-        if (canSpreadTo(pLevel, pPos, gas, flowDirection))
+        if (canSpreadTo(pLevel, pPos, this, flowDirection))
             particleDirections.add(Triple.of(0D, 1/16D, 0D));
         else
             for (Direction dir : Direction.Plane.HORIZONTAL)
-                if (canSpreadTo(pLevel, pPos, gas, dir))
+                if (canSpreadTo(pLevel, pPos, this, dir))
                     particleDirections.add(Triple.of(dir.getStepX()/16D, 0D, dir.getStepZ()/16D));
 
         for (int i = 0; i < amount; i++)
@@ -422,7 +423,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
                 Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.CLOUD,pPos.getX() + Math.random(), pPos.getY() + Math.random(), pPos.getZ() + Math.random(), direction.getLeft(), direction.getMiddle(), direction.getRight());
                 assert particle != null;
                 particle.setAlpha(0.2f);
-                int color = gas.getAttributes().getColor(pLevel, pPos);
+                int color = this.getAttributes().getColor(pLevel, pPos);
 
                 particle.setColor(FastColor.ARGB32.red(color) / 256f, FastColor.ARGB32.green(color) / 256f, FastColor.ARGB32.blue(color) / 256f);
                 particle.setLifetime(time);
