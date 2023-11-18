@@ -73,17 +73,17 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="../IFluidBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IFluidBehavior</a></code>, <code><a href="../onTouch/IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a></code>, <code><a href="../onTouch/IInteractionBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionBehavior</a></code>, <code><a href="../onTouch/IInteractionWithNeighborBlockUpdate.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdate</a></code>, <code><a href="../onTouch/IInteractionWithNeighborBlockUpdateBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdateBehavior</a></code></dd>
+<dd><code><a href="../IFluidBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors">IFluidBehavior</a></code>, <code><a href="../ontouch/IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch">IInteraction</a></code>, <code><a href="../ontouch/IInteractionBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch">IInteractionBehavior</a></code>, <code><a href="../ontouch/IInteractionWithNeighborBlockUpdate.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch">IInteractionWithNeighborBlockUpdate</a></code>, <code><a href="../ontouch/IInteractionWithNeighborBlockUpdateBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch">IInteractionWithNeighborBlockUpdateBehavior</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="FlammableBehaviorImpl.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable">FlammableBehaviorImpl</a></code></dd>
+<dd><code><a href="FlammableBehavior.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable">FlammableBehavior</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">IFlammableBehavior</span><span class="extends-implements">
-extends <a href="../onTouch/IInteractionWithNeighborBlockUpdateBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdateBehavior</a></span></div>
+extends <a href="../ontouch/IInteractionWithNeighborBlockUpdateBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch">IInteractionWithNeighborBlockUpdateBehavior</a></span></div>
 <div class="block"><p>Api for creating fluid behavior making fluid flammable</p>
- <p>This is a interface for <a href="FlammableBehaviorImpl.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable"><code>FlammableBehaviorImpl</code></a> for allowance of further extending</p></div>
+ <p>This is a interface for <a href="FlammableBehavior.html" title="class in com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable"><code>FlammableBehavior</code></a> for allowance of further extending</p></div>
 <dl class="notes">
 <dt>Since:</dt>
 <dd>2.0</dd>
@@ -145,17 +145,17 @@ extends <a href="../onTouch/IInteractionWithNeighborBlockUpdateBehavior.html" ti
 </div>
 </div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.IInteraction">Methods inherited from interface&nbsp;com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="../onTouch/IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a></h3>
-<code><a href="../onTouch/IInteraction.html#interactWithBlockDestroyed(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">interactWithBlockDestroyed</a>, <a href="../onTouch/IInteraction.html#interactWithEntity(net.minecraft.core.BlockPos,net.minecraft.world.entity.Entity)">interactWithEntity</a>, <a href="../onTouch/IInteraction.html#interactWithFluid(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.material.Fluid)">interactWithFluid</a>, <a href="../onTouch/IInteraction.html#interactWithItem(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.item.ItemStack)">interactWithItem</a></code></div>
+<h3 id="methods-inherited-from-class-com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch.IInteraction">Methods inherited from interface&nbsp;com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch.<a href="../ontouch/IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch">IInteraction</a></h3>
+<code><a href="../ontouch/IInteraction.html#interactWithBlockDestroyed(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">interactWithBlockDestroyed</a>, <a href="../ontouch/IInteraction.html#interactWithEntity(net.minecraft.core.BlockPos,net.minecraft.world.entity.Entity)">interactWithEntity</a>, <a href="../ontouch/IInteraction.html#interactWithFluid(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.material.Fluid)">interactWithFluid</a>, <a href="../ontouch/IInteraction.html#interactWithItem(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.item.ItemStack)">interactWithItem</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.IInteractionBehavior">Methods inherited from interface&nbsp;com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="../onTouch/IInteractionBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionBehavior</a></h3>
-<code><a href="../onTouch/IInteractionBehavior.html#beforeDestroyingBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">beforeDestroyingBlock</a></code></div>
+<h3 id="methods-inherited-from-class-com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch.IInteractionBehavior">Methods inherited from interface&nbsp;com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch.<a href="../ontouch/IInteractionBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch">IInteractionBehavior</a></h3>
+<code><a href="../ontouch/IInteractionBehavior.html#beforeDestroyingBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">beforeDestroyingBlock</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.IInteractionWithNeighborBlockUpdate">Methods inherited from interface&nbsp;com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="../onTouch/IInteractionWithNeighborBlockUpdate.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdate</a></h3>
-<code><a href="../onTouch/IInteractionWithNeighborBlockUpdate.html#interactWithNeighborBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.core.BlockPos)">interactWithNeighborBlock</a></code></div>
+<h3 id="methods-inherited-from-class-com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch.IInteractionWithNeighborBlockUpdate">Methods inherited from interface&nbsp;com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch.<a href="../ontouch/IInteractionWithNeighborBlockUpdate.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch">IInteractionWithNeighborBlockUpdate</a></h3>
+<code><a href="../ontouch/IInteractionWithNeighborBlockUpdate.html#interactWithNeighborBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.core.BlockPos)">interactWithNeighborBlock</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.IInteractionWithNeighborBlockUpdateBehavior">Methods inherited from interface&nbsp;com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.<a href="../onTouch/IInteractionWithNeighborBlockUpdateBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteractionWithNeighborBlockUpdateBehavior</a></h3>
-<code><a href="../onTouch/IInteractionWithNeighborBlockUpdateBehavior.html#neighborChange(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.level.block.Block,net.minecraft.core.BlockPos,boolean)">neighborChange</a>, <a href="../onTouch/IInteractionWithNeighborBlockUpdateBehavior.html#requireBlockBeBehaviorable()">requireBlockBeBehaviorable</a></code></div>
+<h3 id="methods-inherited-from-class-com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch.IInteractionWithNeighborBlockUpdateBehavior">Methods inherited from interface&nbsp;com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch.<a href="../ontouch/IInteractionWithNeighborBlockUpdateBehavior.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch">IInteractionWithNeighborBlockUpdateBehavior</a></h3>
+<code><a href="../ontouch/IInteractionWithNeighborBlockUpdateBehavior.html#neighborChange(net.minecraft.world.level.block.state.BlockState,net.minecraft.world.level.Level,net.minecraft.core.BlockPos,net.minecraft.world.level.block.Block,net.minecraft.core.BlockPos,boolean)">neighborChange</a>, <a href="../ontouch/IInteractionWithNeighborBlockUpdateBehavior.html#requireBlockBeBehaviorable()">requireBlockBeBehaviorable</a></code></div>
 </section>
 </li>
 </ul>
@@ -192,12 +192,12 @@ extends <a href="../onTouch/IInteractionWithNeighborBlockUpdateBehavior.html" ti
  @NotNull net.minecraft.core.BlockPos&nbsp;pos,
  @NotNull
  @NotNull net.minecraft.world.level.block.state.BlockState&nbsp;interactant)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../onTouch/IInteraction.html#interactWithBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">IInteraction</a></code></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../ontouch/IInteraction.html#interactWithBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">IInteraction</a></code></span></div>
 <div class="block"><p>Interact with a block</p>
- <p>This will default call <a href="../onTouch/IInteraction.html#interactWithFluid(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.material.Fluid)"><code>IInteraction.interactWithFluid(LevelAccessor, BlockPos, Fluid)</code></a> when the block has a fluid state</p></div>
+ <p>This will default call <a href="../ontouch/IInteraction.html#interactWithFluid(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.material.Fluid)"><code>IInteraction.interactWithFluid(LevelAccessor, BlockPos, Fluid)</code></a> when the block has a fluid state</p></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../onTouch/IInteraction.html#interactWithBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">interactWithBlock</a></code>&nbsp;in interface&nbsp;<code><a href="../onTouch/IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch">IInteraction</a></code></dd>
+<dd><code><a href="../ontouch/IInteraction.html#interactWithBlock(net.minecraft.world.level.LevelAccessor,net.minecraft.core.BlockPos,net.minecraft.world.level.block.state.BlockState)">interactWithBlock</a></code>&nbsp;in interface&nbsp;<code><a href="../ontouch/IInteraction.html" title="interface in com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch">IInteraction</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>level</code> - The level</dd>
 <dd><code>pos</code> - The position of the block</dd>
