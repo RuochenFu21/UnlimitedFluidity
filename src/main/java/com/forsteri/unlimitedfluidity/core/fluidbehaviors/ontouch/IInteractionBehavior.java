@@ -1,4 +1,4 @@
-package com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch;
+package com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch;
 
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.IFluidBehavior;
 import com.forsteri.unlimitedfluidity.util.Api;

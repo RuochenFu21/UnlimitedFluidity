@@ -5,7 +5,7 @@ import com.forsteri.unlimitedfluidity.util.Api;
 
 /**
  * <p>Api for creating fluid behavior allowing/disallowing player to swim in the fluid</p>
- * <p>This is a interface for {@link SwimmingFluidBehaviorImpl} for allowance of further extending</p>
+ * <p>This is a interface for {@link SwimmingFluidBehavior} for allowance of further extending</p>
  * @since       2.0
  */
 @Api

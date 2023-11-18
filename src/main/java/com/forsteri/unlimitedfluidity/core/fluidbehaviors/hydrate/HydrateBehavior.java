@@ -1,15 +1,15 @@
 package com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.AgriculturalHydrationFluidBehaviorImpl;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.farmlandhydration.FarmlandHydrationFluidBehaviorImpl;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.sugarcanehydration.SugarCaneHydrationFluidBehaviorImpl;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.concretehydration.ConcreteHydrationFluidBehaviorImpl;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging.SpongingFluidBehaviorImpl;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.AgriculturalHydrationFluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.farmlandhydration.FarmlandHydrationFluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.agriculturalhydration.sugarcanehydration.SugarCaneHydrationFluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.concretehydration.ConcreteHydrationFluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.sponging.SpongingFluidBehavior;
 
 import com.forsteri.unlimitedfluidity.util.Api;
 
 /**
  * <p>Default fluid behavior implementation for allowing/disallowing hydration</p>
- * <p>This has the behavior of {@link AgriculturalHydrationFluidBehaviorImpl}({@link FarmlandHydrationFluidBehaviorImpl} &amp; {@link SugarCaneHydrationFluidBehaviorImpl}) &amp; {@link ConcreteHydrationFluidBehaviorImpl} &amp; {@link SpongingFluidBehaviorImpl}</p>
+ * <p>This has the behavior of {@link AgriculturalHydrationFluidBehavior}({@link FarmlandHydrationFluidBehavior} &amp; {@link SugarCaneHydrationFluidBehavior}) &amp; {@link ConcreteHydrationFluidBehavior} &amp; {@link SpongingFluidBehavior}</p>
  * @since       2.0
  * @param canHydrate whether the fluid can are able to hydrate
  */

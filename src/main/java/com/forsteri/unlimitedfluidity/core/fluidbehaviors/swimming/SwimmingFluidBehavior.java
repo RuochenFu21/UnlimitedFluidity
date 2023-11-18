@@ -8,13 +8,13 @@ import com.forsteri.unlimitedfluidity.util.Api;
  * @param canSwim whether the player can swim in this fluid
  */
 @Api
-public record SwimmingFluidBehaviorImpl(boolean canSwim) implements ISwimmingFluidBehavior {
+public record SwimmingFluidBehavior(boolean canSwim) implements ISwimmingFluidBehavior {
     /**
      * <p>Fluid behavior implementation disallowing player to swim in the fluid</p>
      * @since       2.0
      */
     @Api
-    public SwimmingFluidBehaviorImpl() {
+    public SwimmingFluidBehavior() {
         this(true);
     }
 }

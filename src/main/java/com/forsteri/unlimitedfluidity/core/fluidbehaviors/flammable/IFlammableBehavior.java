@@ -1,6 +1,6 @@
 package com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable;
 
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.IInteractionWithNeighborBlockUpdateBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch.IInteractionWithNeighborBlockUpdateBehavior;
 import com.forsteri.unlimitedfluidity.entry.FluidityTags;
 import com.forsteri.unlimitedfluidity.util.Api;
 import net.minecraft.core.BlockPos;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * <p>Api for creating fluid behavior making fluid flammable</p>
- * <p>This is a interface for {@link FlammableBehaviorImpl} for allowance of further extending</p>
+ * <p>This is a interface for {@link FlammableBehavior} for allowance of further extending</p>
  * @since       2.0
  */
 @Api

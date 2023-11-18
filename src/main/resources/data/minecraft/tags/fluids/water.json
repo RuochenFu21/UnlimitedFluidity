@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "unlimitedfluidity:debug_fluid",
+    "unlimitedfluidity:debug_fluid_flowing"
+  ]
+}

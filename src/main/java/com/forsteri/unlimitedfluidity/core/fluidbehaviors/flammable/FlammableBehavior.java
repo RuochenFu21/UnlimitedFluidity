@@ -7,4 +7,4 @@ import com.forsteri.unlimitedfluidity.util.Api;
  * @since       2.0
  */
 @Api
-public record FlammableBehaviorImpl() implements IFlammableBehavior {}
+public record FlammableBehavior() implements IFlammableBehavior {}

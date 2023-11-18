@@ -5,7 +5,7 @@ import com.forsteri.unlimitedfluidity.util.Api;
 
 /**
  * <p>Api for creating fluid behavior allowing/disallowing sugarcane hydration</p>
- * <p>This is a interface for {@link SugarCaneHydrationFluidBehaviorImpl} for allowance of further extending</p>
+ * <p>This is a interface for {@link SugarCaneHydrationFluidBehavior} for allowance of further extending</p>
  * @since       2.0
  */
 @Api

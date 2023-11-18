@@ -2,9 +2,12 @@ package com.forsteri.unlimitedfluidity.core.flowinggas;
 
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableFluid;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.IFluidBehavior;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable.FlammableBehaviorImpl;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable.FlammableBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.fluidfog.FluidFogBehavior;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.HydrateBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.pushless.PushlessFluidBehavior;
 import com.forsteri.unlimitedfluidity.util.Api;
+import com.forsteri.unlimitedfluidity.util.Triplet;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -566,7 +569,8 @@ public abstract class FlowingGas extends BehaviorableFluid {
 
         // Temporary STARTS
         behaviors.add(new HydrateBehavior(true));
-        behaviors.add(new FlammableBehaviorImpl());
+        behaviors.add(new FlammableBehavior());
+        behaviors.add(new FluidFogBehavior(new Triplet<>(Optional.of(0.0f), Optional.of(0.5f), Optional.of(0.5f)), Optional.of(1/8f)));
         // Temporary ENDS
 
         behaviors.add(new IFluidBehavior() {
@@ -575,6 +579,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
                 return true;
             }
         });
+        behaviors.add(new PushlessFluidBehavior());
         return behaviors;
     }
 }

@@ -1,7 +1,8 @@
 package com.forsteri.unlimitedfluidity.mixin.behavioreffect;
 
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableFluid;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.onTouch.FluidEntityInteractionHandler;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch.FluidEntityInteractionHandler;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.pushless.IPushlessFluidBehavior;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.swimming.ISwimmingFluidBehavior;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.viscosity.IViscosityFluidBehavior;
 import net.minecraft.commands.CommandSource;
@@ -11,6 +12,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityAccess;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +21,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -75,5 +79,13 @@ public abstract class MixinEntity extends net.minecraftforge.common.capabilities
         // TODO: Fluid Lift Behavior
 
         FluidEntityInteractionHandler.handleInteraction((Entity) (Object) this);
+    }
+
+    @ModifyVariable(method = "updateFluidHeightAndDoFluidPushing", at = @At(value = "STORE"))
+    private FluidState updateFluidHeightAndDoFluidPushing(FluidState original) {
+        if ((original.getType() instanceof BehaviorableFluid behaviorableFluid)
+                && !behaviorableFluid.getBehavior(IPushlessFluidBehavior.class).isEmpty())
+            return Fluids.EMPTY.defaultFluidState();
+        return original;
     }
 }
