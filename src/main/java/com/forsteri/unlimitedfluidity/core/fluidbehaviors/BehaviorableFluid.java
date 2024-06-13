@@ -31,6 +31,11 @@ public abstract class BehaviorableFluid extends SmartFluid implements IBehaviora
     }
 
     @Override
+    public int getAmount(FluidState pState) {
+        return pState.hasProperty(LEVEL) ? pState.getValue(LEVEL) : 8;
+    }
+
+    @Override
     protected void beforeDestroyingBlock(LevelAccessor worldIn, BlockPos pos, BlockState state) {
         if (getBehaviors().stream().anyMatch(behavior -> behavior.beforeDestroyingBlock(worldIn, pos, state)))
             return;

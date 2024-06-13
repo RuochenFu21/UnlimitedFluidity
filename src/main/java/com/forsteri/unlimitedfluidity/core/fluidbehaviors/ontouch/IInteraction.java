@@ -33,7 +33,7 @@ public interface IInteraction {
     @Api
     default void interactWithEntity(BlockPos pos, Entity interactant) {
         if (interactant instanceof ItemEntity itemEntity)
-            interactWithItem(interactant.getLevel(), pos, itemEntity.getItem());
+            interactWithItem(interactant.level(), pos, itemEntity.getItem());
        
     }
 

@@ -2,9 +2,7 @@ package com.forsteri.unlimitedfluidity.core.flowinggas;
 
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableFluid;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.IFluidBehavior;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable.FlammableBehavior;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.fluidfog.FluidFogBehavior;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.hydrate.HydrateBehavior;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.pushless.PushlessFluidBehavior;
 import com.forsteri.unlimitedfluidity.util.Api;
 import com.forsteri.unlimitedfluidity.util.Triplet;
@@ -15,13 +13,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.FastColor;
-import net.minecraft.world.item.Item;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.AirBlock;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -29,8 +26,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fluids.FluidAttributes;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
 import org.jgrapht.Graph;
@@ -43,7 +39,6 @@ import org.jgrapht.traverse.BreadthFirstIterator;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -54,18 +49,12 @@ import java.util.stream.IntStream;
 @ParametersAreNonnullByDefault
 @Api
 public abstract class FlowingGas extends BehaviorableFluid {
-    public static final int MAX_DENSITY = 128;
+    public static final int MAX_DENSITY = 100;
     public static final IntegerProperty DENSITY = IntegerProperty.create("density", 1, MAX_DENSITY);
     public static final Map<LevelAccessor, Map<BlockPos, Direction>> gasMovementMap = new HashMap<>();
 
-    protected final Direction flowDirection;
-    protected final double risePossibility;
-
     protected FlowingGas(Properties properties) {
         super(properties);
-
-        this.flowDirection = properties.gasFlowDirection.direction;
-        this.risePossibility = properties.risePossibility;
 
         if (this.isSource(this.defaultFluidState())) {
             this.registerDefaultState(this.getStateDefinition().any()
@@ -97,10 +86,10 @@ public abstract class FlowingGas extends BehaviorableFluid {
     }
 
     @Override
-    protected void spread(LevelAccessor pLevel, BlockPos pPos, FluidState pState) {
+    protected void spread(Level pLevel, BlockPos pPos, FluidState pState) {
         if (pState.isEmpty()) return;
 
-        boolean rises = Math.random() < risePossibility;
+        boolean rises = Math.random() > getRisePossibility();
 
         if (!rises && spreadVertically(pLevel, pPos, pState, true))
             spreadVertically(pLevel, pPos, pState, false);
@@ -122,7 +111,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
     }
 
     @Override
-    protected void randomTick(Level pLevel, BlockPos pPos, FluidState pState, Random pRandom) {
+    protected void randomTick(Level pLevel, BlockPos pPos, FluidState pState, RandomSource pRandom) {
         spread(pLevel, pPos, pState);
     }
 
@@ -144,7 +133,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
         invalid |= density == MAX_DENSITY;
         invalid |= looped(pLevel, pPos.relative(direction));
         invalid |= density == -1;
-        invalid |= !getGasMap(pLevel).containsKey(pPos.relative(direction)) && direction != flowDirection;
+        invalid |= !getGasMap(pLevel).containsKey(pPos.relative(direction)) && direction != getFlowDirection();
 
         currentOnly |= density == MAX_DENSITY;
         fixableWithFindingAgain |= looped(pLevel, pPos);
@@ -168,7 +157,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
     private static final List<BlockPos> loopCheck = new ArrayList<>();
     protected boolean looped(LevelAccessor pLevel, BlockPos pPos) {
         Direction gasMovement = getGasMap(pLevel).get(pPos);
-        if (loopCheck.contains(pPos) || gasMovement == null || gasMovement == flowDirection) {
+        if (loopCheck.contains(pPos) || gasMovement == null || gasMovement == getFlowDirection()) {
             boolean contains = loopCheck.contains(pPos);
             loopCheck.clear();
             return contains;
@@ -240,20 +229,20 @@ public abstract class FlowingGas extends BehaviorableFluid {
     }
 
     protected boolean spreadVertically(LevelAccessor pLevel, BlockPos pPos, FluidState pState, boolean simulate) {
-        if (!canSpreadTo(pLevel, pPos.relative(flowDirection))) return false;
-        if (pState.getValue(FlowingGas.DENSITY) > MAX_DENSITY - getMovementHandler(pLevel).getDensity(pPos.relative(flowDirection))) return false;
+        if (!canSpreadTo(pLevel, pPos.relative(getFlowDirection()))) return false;
+        if (pState.getValue(FlowingGas.DENSITY) > MAX_DENSITY - getMovementHandler(pLevel).getDensity(pPos.relative(getFlowDirection()))) return false;
 
         if (simulate) return true;
 
-        if (!pLevel.getBlockState(pPos.relative(flowDirection)).isAir() && getMovementHandler(pLevel).getDensity(pPos.relative(flowDirection)) == 0)
-            beforeDestroyingBlock(pLevel, pPos.relative(flowDirection), pLevel.getBlockState(pPos.relative(flowDirection)));
+        if (!pLevel.getBlockState(pPos.relative(getFlowDirection())).isAir() && getMovementHandler(pLevel).getDensity(pPos.relative(getFlowDirection())) == 0)
+            beforeDestroyingBlock(pLevel, pPos.relative(getFlowDirection()), pLevel.getBlockState(pPos.relative(getFlowDirection())));
 
-        getMovementHandler(pLevel).move(pPos, Math.min(pState.getValue(FlowingGas.DENSITY), MAX_DENSITY - getMovementHandler(pLevel).getDensity(pPos.relative(flowDirection))), flowDirection);
-        for (BlockPos pos : new BlockPos[] {pPos, pPos.relative(flowDirection)})
+        getMovementHandler(pLevel).move(pPos, Math.min(pState.getValue(FlowingGas.DENSITY), MAX_DENSITY - getMovementHandler(pLevel).getDensity(pPos.relative(getFlowDirection()))), getFlowDirection());
+        for (BlockPos pos : new BlockPos[] {pPos, pPos.relative(getFlowDirection())})
             if (!getGraph(pLevel).containsVertex(pos))
                 getGraph(pLevel).addVertex(pos);
-        if (!getGraph(pLevel).containsEdge(pPos, pPos.relative(flowDirection)))
-            getGraph(pLevel).addEdge(pPos, pPos.relative(flowDirection));
+        if (!getGraph(pLevel).containsEdge(pPos, pPos.relative(getFlowDirection())))
+            getGraph(pLevel).addEdge(pPos, pPos.relative(getFlowDirection()));
 
         return true;
     }
@@ -402,19 +391,19 @@ public abstract class FlowingGas extends BehaviorableFluid {
     }
 
     @Override
-    protected void animateTick(Level p_76116_, BlockPos pPos, FluidState p_76118_, Random p_76119_) {
-        if (!(p_76118_.getType() instanceof FlowingGas))
+    protected void animateTick(Level p_76116_, BlockPos pPos, FluidState state, RandomSource p_76119_) {
+        if (!(state.getType() instanceof FlowingGas))
             return;
 
-        render(p_76116_, pPos, 3, 160);
+        render(p_76116_, pPos, 3, 160, state);
     }
 
-    public void render(BlockAndTintGetter pLevel, BlockPos pPos, int amount, int time) {
+    public void render(BlockAndTintGetter pLevel, BlockPos pPos, int amount, int time, FluidState state) {
         ArrayList<Triple<Double, Double, Double>> particleDirections = new ArrayList<>();
 
         particleDirections.add(Triple.of(0D, 0D, 0D));
 
-        if (canSpreadTo(pLevel, pPos, this, flowDirection))
+        if (canSpreadTo(pLevel, pPos, this, getFlowDirection()))
             particleDirections.add(Triple.of(0D, 1/16D, 0D));
         else
             for (Direction dir : Direction.Plane.HORIZONTAL)
@@ -423,10 +412,14 @@ public abstract class FlowingGas extends BehaviorableFluid {
 
         for (int i = 0; i < amount; i++)
             for (Triple<Double, Double, Double> direction : particleDirections) {
+                if (Math.random() > (Math.max((state.getAmount() / 64f), 0.1f))) continue;
+                // > 1/4 density = 100% chance
+                // else less chance
+
                 Particle particle = Minecraft.getInstance().particleEngine.createParticle(ParticleTypes.CLOUD,pPos.getX() + Math.random(), pPos.getY() + Math.random(), pPos.getZ() + Math.random(), direction.getLeft(), direction.getMiddle(), direction.getRight());
                 assert particle != null;
                 particle.setAlpha(0.2f);
-                int color = this.getAttributes().getColor(pLevel, pPos);
+                int color = IClientFluidTypeExtensions.of(this).getTintColor();
 
                 particle.setColor(FastColor.ARGB32.red(color) / 256f, FastColor.ARGB32.green(color) / 256f, FastColor.ARGB32.blue(color) / 256f);
                 particle.setLifetime(time);
@@ -446,89 +439,12 @@ public abstract class FlowingGas extends BehaviorableFluid {
         return Shapes.block();
     }
 
-    /**
-     * <p>Gas properties</p>
-     * @since       1.0
-     */
-    @Api
-    public static class Properties extends ForgeFlowingFluid.Properties {
-        public Properties(Supplier<? extends Fluid> still, Supplier<? extends Fluid> flowing, FluidAttributes.Builder attributes) {
-            super(still, flowing, attributes);
-        }
+    protected Direction getFlowDirection() {
+        return getFluidType().getDensity() <= 0 ? Direction.UP : Direction.DOWN;
+    }
 
-        protected GasFlowDirection gasFlowDirection = GasFlowDirection.UP;
-
-        protected double risePossibility = 1f;
-
-        /**
-         * <p>Gas flow direction</p>
-         * @since       1.0
-         */
-        @Api
-        public Properties gasFlowDirection(GasFlowDirection direction)
-        {
-            gasFlowDirection = direction;
-            return this;
-        }
-
-        /**
-         * <p>Properties for a gas to rise instead of spread vertical</p>
-         * @since       1.0
-         */
-        @Api
-        public Properties risePossibility(double risePossibility) {
-            this.risePossibility = risePossibility;
-            return this;
-        }
-
-        public enum GasFlowDirection {
-            UP(Direction.UP), DOWN(Direction.DOWN);
-
-            private final Direction direction;
-
-            GasFlowDirection(Direction direction) {
-                if (direction.getStepY() == 0) throw new IllegalStateException("Gas flow direction must be vertical");
-
-                this.direction = direction;
-            }
-        }
-
-        // Casts to our own Properties
-
-        public Properties canMultiply()
-        {
-            return (Properties) super.canMultiply();
-        }
-
-        public Properties bucket(Supplier<? extends Item> bucket)
-        {
-            return (Properties) super.bucket(bucket);
-        }
-
-        public Properties block(Supplier<? extends LiquidBlock> block)
-        {
-            return (Properties) super.block(block);
-        }
-
-        public Properties slopeFindDistance(int slopeFindDistance)
-        {
-            throw new UnsupportedOperationException("Gas fluids cannot have a slope find distance property");
-        }
-
-        public Properties levelDecreasePerBlock(int levelDecreasePerBlock)
-        {
-            throw new UnsupportedOperationException("Gas fluids cannot have a level decrease per block property");
-        }
-
-        public Properties explosionResistance(float explosionResistance)
-        {
-            return (Properties) super.explosionResistance(explosionResistance);
-        }
-
-        public Properties tickRate(int tickRate)
-        {
-            return (Properties) super.tickRate(tickRate);
-        }
+    protected double getRisePossibility() {
+        return Math.min(Math.abs(getFluidType().getDensity() / 10f), 1);
     }
 
     /**
@@ -564,13 +480,20 @@ public abstract class FlowingGas extends BehaviorableFluid {
     }
 
     @Override
+    public boolean canHydrate(FluidState state, BlockGetter getter, BlockPos pos, BlockState source, BlockPos sourcePos) {
+        return true; // Temporary
+    }
+
+    @Override
     public List<IFluidBehavior> getUncheckedBehaviors() {
         List<IFluidBehavior> behaviors = new ArrayList<>();
 
         // Temporary STARTS
-        behaviors.add(new HydrateBehavior(true));
-        behaviors.add(new FlammableBehavior());
-        behaviors.add(new FluidFogBehavior(new Triplet<>(Optional.of(0.0f), Optional.of(0.5f), Optional.of(0.5f)), Optional.of(1/8f)));
+//        behaviors.add(new FlammableBehavior());
+
+        int color = IClientFluidTypeExtensions.of(this).getTintColor();
+
+        behaviors.add(new FluidFogBehavior(new Triplet<>(Optional.of(FastColor.ARGB32.red(color) / 256f), Optional.of(FastColor.ARGB32.green(color) / 256f), Optional.of(FastColor.ARGB32.blue(color) / 256f)), Optional.of(1/8f)));
         // Temporary ENDS
 
         behaviors.add(new IFluidBehavior() {
@@ -581,6 +504,11 @@ public abstract class FlowingGas extends BehaviorableFluid {
         });
         behaviors.add(new PushlessFluidBehavior());
         return behaviors;
+    }
+
+    @Override
+    public float getHeight(FluidState p_76050_, BlockGetter p_76051_, BlockPos p_76052_) {
+        return 1;
     }
 }
 

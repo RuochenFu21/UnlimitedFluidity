@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -20,7 +20,7 @@ import java.util.Optional;
 @Mod.EventBusSubscriber(Dist.CLIENT)
 public class FluidFogBehaviorApplierEventSubscriber {
     @SubscribeEvent
-    public static void getFogDensity(EntityViewRenderEvent.RenderFogEvent event) {
+    public static void getFogDensity(ViewportEvent.RenderFog event) {
         Optional<List<FluidFogBehavior>> optionalFluidFogBehaviors = getFluidFogBehaviors(event);
 
         if (optionalFluidFogBehaviors.isEmpty()) return;
@@ -37,7 +37,7 @@ public class FluidFogBehaviorApplierEventSubscriber {
     }
 
     @SubscribeEvent
-    public static void getFogColor(EntityViewRenderEvent.FogColors event) {
+    public static void getFogColor(ViewportEvent.ComputeFogColor event) {
         Optional<List<FluidFogBehavior>> optionalFluidFogBehaviors = getFluidFogBehaviors(event);
 
         if (optionalFluidFogBehaviors.isEmpty()) return;
@@ -70,7 +70,7 @@ public class FluidFogBehaviorApplierEventSubscriber {
         }
     }
 
-    private static Optional<List<FluidFogBehavior>> getFluidFogBehaviors(EntityViewRenderEvent event) {
+    private static Optional<List<FluidFogBehavior>> getFluidFogBehaviors(ViewportEvent event) {
         Camera camera = event.getCamera();
         Level level = Minecraft.getInstance().level;
 

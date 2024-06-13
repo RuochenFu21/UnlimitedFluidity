@@ -23,9 +23,9 @@ public abstract class MixinPlayerCloudParticle extends TextureSheetParticle impl
     private void unlimitedFluidity$checkGasStillExists(CallbackInfo ci) {
         if (unlimitedFluidity$isGasParticle) {
             BlockPos pos = new BlockPos(
-                    this.x,
-                    this.y,
-                    this.z
+                    (int) this.x,
+                    (int) this.y,
+                    (int) this.z
             );
             BlockState state = level.getBlockState(pos);
             if (!state.getFluidState().is(unlimitedFluidity$gasParticle))

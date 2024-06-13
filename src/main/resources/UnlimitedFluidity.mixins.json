@@ -6,11 +6,9 @@
   "refmap": "UnlimitedFluidity.refmap.json",
   "mixins": [
     "MixinLiquidBlockRenderer",
-    "behavioreffect.MixinConcretePowderBlock",
-    "behavioreffect.MixinEntity",
-    "behavioreffect.MixinFarmBlock",
-    "behavioreffect.MixinSponge",
-    "behavioreffect.MixinSugarCaneBlock"
+    "MixinOpenEndedPipe",
+    "MixinOpenEndFluidHandler",
+    "MixinVanillaFluidTargets"
   ],
   "client": [
     "MixinPlayerCloudParticle"

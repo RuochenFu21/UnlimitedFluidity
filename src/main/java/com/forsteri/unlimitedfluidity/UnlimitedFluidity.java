@@ -3,10 +3,11 @@ package com.forsteri.unlimitedfluidity;
 import com.forsteri.unlimitedfluidity.core.flowinggas.FlowingGas;
 import com.forsteri.unlimitedfluidity.core.flowinggas.GasMovementHandler;
 import com.forsteri.unlimitedfluidity.core.flowinggas.command.GasTypeArgument;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.ontouch.FluidEntityInteractionHandler;
 import com.forsteri.unlimitedfluidity.debug.FluidityDebugRegistry;
+import com.simibubi.create.foundation.utility.Components;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -38,7 +39,7 @@ public class UnlimitedFluidity {
                     SimpleWeightedGraph<BlockPos, DefaultWeightedEdge> graph = handler.getGraph();
                     List<DefaultWeightedEdge> removingEdges = new ArrayList<>();
                     graph.edgeSet().forEach(edge -> {
-                                graph.setEdgeWeight(edge, graph.getEdgeWeight(edge) - 1d/(20 * 5));
+                                graph.setEdgeWeight(edge, graph.getEdgeWeight(edge) - 1d/(20 * 60));
                                 double weight = graph.getEdgeWeight(edge);
                                 if (weight <= 0)
                                     removingEdges.add(edge);
@@ -55,6 +56,12 @@ public class UnlimitedFluidity {
 
                     removingVertexes.forEach(graph::removeVertex);
                 }
+        );
+
+        event.getServer().getAllLevels().forEach(
+                serverLevel -> serverLevel.getEntities().getAll().forEach(
+                        FluidEntityInteractionHandler::handleInteraction
+                )
         );
     }
 
@@ -73,7 +80,7 @@ public class UnlimitedFluidity {
                                                         FlowingGas.gasMovementMap.get(pair.getFirst()).clear();
                                                     }
                                             );
-                                            context.getSource().sendSuccess(new TextComponent("Succeed to clear path finder cache for " + context.getArgument("gas", FlowingGas.class).getRegistryName()), false);
+                                            context.getSource().sendSuccess(() -> Components.literal("Succeed to clear path finder cache"), false);
                                             return 0;
                                         })
                                 )

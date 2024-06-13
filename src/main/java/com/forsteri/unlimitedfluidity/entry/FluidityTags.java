@@ -1,6 +1,7 @@
 package com.forsteri.unlimitedfluidity.entry;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -33,7 +34,7 @@ public interface FluidityTags<T> {
 
         @Override
         public ResourceKey<? extends Registry<Block>> getRegistry() {
-            return Registry.BLOCK_REGISTRY;
+            return Registries.BLOCK;
         }
     }
 }
