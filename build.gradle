@@ -30,7 +30,7 @@ jarJar {
     // Include or exclude dependencies here from runtime configuration
     dependencies {
         // Exclude any dependency which begins with 'com.google.gson.'
-        include (dependency 'org.apfloat:apfloat:1.11.0')
+        include (dependency 'org.apfloat:apfloat:2.0')
         include (dependency 'org.jgrapht:jgrapht:1.5.2')
         include (dependency 'org.jgrapht:jgrapht-core:1.5.2')
     }
