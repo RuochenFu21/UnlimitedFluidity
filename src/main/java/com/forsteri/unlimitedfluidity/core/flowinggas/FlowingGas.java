@@ -2,7 +2,6 @@ package com.forsteri.unlimitedfluidity.core.flowinggas;
 
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableFluid;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.IFluidBehavior;
-import com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable.FlammableBehavior;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.fluidfog.FluidFogBehavior;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.pushless.PushlessFluidBehavior;
 import com.forsteri.unlimitedfluidity.util.Api;
@@ -488,8 +487,6 @@ public abstract class FlowingGas extends BehaviorableFluid {
     @Override
     public List<IFluidBehavior> getUncheckedBehaviors() {
         List<IFluidBehavior> behaviors = new ArrayList<>();
-
-        behaviors.add(new FlammableBehavior());
 
         int color = IClientFluidTypeExtensions.of(this).getTintColor();
 

@@ -12,6 +12,7 @@ buildscript {
 plugins {
     id 'net.minecraftforge.gradle' version '5.1.+'
     id 'idea'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 apply plugin: 'org.spongepowered.mixin'
@@ -32,7 +33,7 @@ jarJar {
         // Exclude any dependency which begins with 'com.google.gson.'
         include (dependency 'org.apfloat:apfloat:2.0')
         include (dependency 'org.jgrapht:jgrapht:2.0')
-        include (dependency 'org.jgrapht:jgrapht-core:1.5.2')
+        include (dependency 'org.jgrapht:jgrapht-core:2.0')
     }
 }
 
@@ -153,6 +154,11 @@ repositories {
     }
 }
 
+configurations {
+    shade
+    implementation.extendsFrom shade
+}
+
 dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
@@ -179,6 +185,7 @@ dependencies {
 
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
+    archiveClassifier = 'slim'
     manifest {
         attributes([
                 "Specification-Title": "unlimitedfluidity",
@@ -192,10 +199,25 @@ jar {
     }
 }
 
+shadowJar {
+    archiveClassifier = ''
+    configurations = [project.configurations.shade]
+    finalizedBy 'reobfShadowJar'
+}
+
+assemble.dependsOn shadowJar
+
+reobf {
+    shadowJar {}
+}
+
 dependencies {
     implementation fg.deobf("com.simibubi.create:create-${create_minecraft_version}:${create_version}:slim") { transitive = false }
     implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}")
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
+    shade 'org.apfloat:apfloat:1.11.0'
+    shade 'org.jgrapht:jgrapht:1.5.2'
+    shade 'org.jgrapht:jgrapht-core:1.5.2'
 }
 
 jar.finalizedBy('reobfJar')

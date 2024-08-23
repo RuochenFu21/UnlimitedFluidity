@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/UnlimitedFluidity.iml" filepath="$PROJECT_DIR$/.idea/modules/UnlimitedFluidity.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/UnlimitedFluidity.main.iml" filepath="$PROJECT_DIR$/.idea/modules/UnlimitedFluidity.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1658303058/com.forsteri.unlimitedfluidity.UnlimitedFluidity.main.iml" filepath="$PROJECT_DIR$/.idea/modules/-1658303058/com.forsteri.unlimitedfluidity.UnlimitedFluidity.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/UnlimitedFluidity.test.iml" filepath="$PROJECT_DIR$/.idea/modules/UnlimitedFluidity.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.forsteri.unlimitedfluidity.UnlimitedFluidity.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.forsteri.unlimitedfluidity.UnlimitedFluidity.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1658303058/com.forsteri.unlimitedfluidity.UnlimitedFluidity.test.iml" filepath="$PROJECT_DIR$/.idea/modules/-1658303058/com.forsteri.unlimitedfluidity.UnlimitedFluidity.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/org.forsteri123.UnlimitedFluidity.main.iml" filepath="$PROJECT_DIR$/.idea/modules/org.forsteri123.UnlimitedFluidity.main.iml" />
     </modules>
