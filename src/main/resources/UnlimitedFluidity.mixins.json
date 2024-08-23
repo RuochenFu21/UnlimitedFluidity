@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "UnlimitedFluidity.refmap.json",
   "mixins": [
+    "MixinAirCurrent",
     "MixinLiquidBlockRenderer",
     "MixinOpenEndedPipe",
     "MixinOpenEndFluidHandler",

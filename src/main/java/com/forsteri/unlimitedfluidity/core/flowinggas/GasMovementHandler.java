@@ -80,6 +80,10 @@ public class GasMovementHandler {
                 .increase(pos.relative(direction), density));
     }
 
+    public void flow(BlockPos pos, Direction direction) {
+        this.move(pos, Math.min(this.getDensity(pos), FlowingGas.MAX_DENSITY - this.getDensity(pos.relative(direction))), direction);
+    }
+
     public SimpleWeightedGraph<BlockPos, DefaultWeightedEdge> getGraph() {
         return graph;
     }

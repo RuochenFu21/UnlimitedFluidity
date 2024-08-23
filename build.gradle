@@ -17,7 +17,7 @@ plugins {
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'com.forsteri.unlimitedfluidity'
-version = '2.0-build1'
+version = '2.0'
 
 java {
     archivesBaseName = 'unlimitedfluidity'
@@ -31,7 +31,7 @@ jarJar {
     dependencies {
         // Exclude any dependency which begins with 'com.google.gson.'
         include (dependency 'org.apfloat:apfloat:2.0')
-        include (dependency 'org.jgrapht:jgrapht:1.5.2')
+        include (dependency 'org.jgrapht:jgrapht:2.0')
         include (dependency 'org.jgrapht:jgrapht-core:1.5.2')
     }
 }

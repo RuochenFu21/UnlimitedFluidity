@@ -2,6 +2,7 @@ package com.forsteri.unlimitedfluidity.core.flowinggas;
 
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.BehaviorableFluid;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.IFluidBehavior;
+import com.forsteri.unlimitedfluidity.core.fluidbehaviors.flammable.FlammableBehavior;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.fluidfog.FluidFogBehavior;
 import com.forsteri.unlimitedfluidity.core.fluidbehaviors.pushless.PushlessFluidBehavior;
 import com.forsteri.unlimitedfluidity.util.Api;
@@ -237,7 +238,7 @@ public abstract class FlowingGas extends BehaviorableFluid {
         if (!pLevel.getBlockState(pPos.relative(getFlowDirection())).isAir() && getMovementHandler(pLevel).getDensity(pPos.relative(getFlowDirection())) == 0)
             beforeDestroyingBlock(pLevel, pPos.relative(getFlowDirection()), pLevel.getBlockState(pPos.relative(getFlowDirection())));
 
-        getMovementHandler(pLevel).move(pPos, Math.min(pState.getValue(FlowingGas.DENSITY), MAX_DENSITY - getMovementHandler(pLevel).getDensity(pPos.relative(getFlowDirection()))), getFlowDirection());
+        getMovementHandler(pLevel).flow(pPos, getFlowDirection());
         for (BlockPos pos : new BlockPos[] {pPos, pPos.relative(getFlowDirection())})
             if (!getGraph(pLevel).containsVertex(pos))
                 getGraph(pLevel).addVertex(pos);
@@ -488,13 +489,11 @@ public abstract class FlowingGas extends BehaviorableFluid {
     public List<IFluidBehavior> getUncheckedBehaviors() {
         List<IFluidBehavior> behaviors = new ArrayList<>();
 
-        // Temporary STARTS
-//        behaviors.add(new FlammableBehavior());
+        behaviors.add(new FlammableBehavior());
 
         int color = IClientFluidTypeExtensions.of(this).getTintColor();
 
         behaviors.add(new FluidFogBehavior(new Triplet<>(Optional.of(FastColor.ARGB32.red(color) / 256f), Optional.of(FastColor.ARGB32.green(color) / 256f), Optional.of(FastColor.ARGB32.blue(color) / 256f)), Optional.of(1/8f)));
-        // Temporary ENDS
 
         behaviors.add(new IFluidBehavior() {
             @Override
