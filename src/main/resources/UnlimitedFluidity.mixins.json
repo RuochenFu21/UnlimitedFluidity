@@ -6,13 +6,13 @@
   "refmap": "UnlimitedFluidity.refmap.json",
   "mixins": [
     "MixinAirCurrent",
-    "MixinLiquidBlockRenderer",
     "MixinOpenEndedPipe",
     "MixinOpenEndFluidHandler",
     "MixinVanillaFluidTargets"
   ],
   "client": [
-    "MixinPlayerCloudParticle"
+    "MixinPlayerCloudParticle",
+    "MixinLiquidBlockRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
